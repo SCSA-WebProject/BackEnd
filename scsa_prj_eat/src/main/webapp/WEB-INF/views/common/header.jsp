@@ -3,12 +3,12 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <div>
 	<c:if test="${empty loginUser}">
-		<a href="login" class="btn btn-outline-warning">로그인</a>
-		<a href="signup" class="btn btn-outline-primary">회원가입</a>
+		<a href="${pageContext.request.contextPath}/login" class="btn btn-outline-warning">로그인</a>
+		<a href="${pageContext.request.contextPath}/signup" class="btn btn-outline-primary">회원가입</a>
 	</c:if>
 	<c:if test="${not empty loginUser}">
 		${loginUser}님 반갑습니다.
-		<a href="logout" class="btn btn-outline-danger">로그아웃</a>
+		<a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-danger">로그아웃</a>
 		<c:if test="${'admin' eq loginUser }">
 			<a href="users">관리자페이지</a>
 		</c:if>

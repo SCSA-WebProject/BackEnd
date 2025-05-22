@@ -7,17 +7,19 @@ public class Diary {
     private String title;
     private Date date;
     private String context;
+    private String userId;
 
     // 기본 생성자 (no-argument constructor)
     public Diary() {
     }
 
     // 모든 필드를 초기화하는 생성자 (parameterized constructor)
-    public Diary(int id, String title, Date date, String context) {
+    public Diary(int id, String title, Date date, String context, String userId) {
         this.id = id;
         this.title = title;
         this.date = date;
         this.context = context;
+        this.userId = userId;
     }
 
     // Getter and Setter for id
@@ -54,5 +56,11 @@ public class Diary {
 
     public void setContext(String context) {
         this.context = context;
+    }
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

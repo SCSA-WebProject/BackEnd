@@ -46,7 +46,7 @@ public class BoardController {
 
 	@GetMapping("/writeform")
 	public String writeform(HttpSession session) {
-		String userId = (String) session.getAttribute("loginUser");
+		String userId = (String) session.getAttribute("loginUserId");
 		if (userId == null) {
 			return "redirect:/login";
 		}
@@ -55,7 +55,7 @@ public class BoardController {
 
 	@PostMapping("write")
 	public String write(@RequestParam("attach") MultipartFile attach, @ModelAttribute Board board, HttpSession session) throws IllegalStateException, IOException {
-		String userId = (String) session.getAttribute("loginUser");
+		String userId = (String) session.getAttribute("loginUserId");
 		if (userId == null) {
 			return "redirect:/login";
 		}
@@ -101,7 +101,7 @@ public class BoardController {
 
 	@GetMapping("/delete")
 	public String delete(@RequestParam("id") int id, HttpSession session) {
-		String userId = (String) session.getAttribute("loginUser");
+		String userId = (String) session.getAttribute("loginUserId");
 		if (userId == null) {
 			return "redirect:/login";
 		}
@@ -117,7 +117,7 @@ public class BoardController {
 
 	@GetMapping("updateform")
 	public String updateform(@RequestParam("id") int id, Model model, HttpSession session) {
-		String userId = (String) session.getAttribute("loginUser");
+		String userId = (String) session.getAttribute("loginUserId");
 		if (userId == null) {
 			return "redirect:/login";
 		}
@@ -133,7 +133,7 @@ public class BoardController {
 
 	@PostMapping("update")
 	public String update(@RequestParam(value = "attach", required = false) MultipartFile attach, @ModelAttribute Board board, HttpSession session) throws IllegalStateException, IOException {
-		String userId = (String) session.getAttribute("loginUser");
+		String userId = (String) session.getAttribute("loginUserId");
 		if (userId == null) {
 			return "redirect:/login";
 		}
