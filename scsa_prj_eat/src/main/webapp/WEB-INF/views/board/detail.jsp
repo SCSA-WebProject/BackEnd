@@ -21,7 +21,18 @@
 					<div class="card-subtitle">가격대: ${board.price}원</div>
 				</div>
 				<c:if test="${not empty board.boardFile}">
-					<p class="card-subtitle">이미지: <a href="/download?oriName=${board.boardFile.oriName}&systemName=${board.boardFile.systemName}&filePath=${board.boardFile.filePath}">${board.boardFile.oriName}</a></p>
+					<div class="mt-3">
+						<img src="/img${board.boardFile.filePath}/${board.boardFile.systemName}" 
+							class="img-fluid rounded" 
+							style="max-width: 500px; max-height: 500px;"
+							alt="${board.boardFile.oriName}">
+						<p class="mt-2">
+							<a href="/download?oriName=${board.boardFile.oriName}&systemName=${board.boardFile.systemName}&filePath=${board.boardFile.filePath}" 
+								class="btn btn-sm btn-outline-secondary">
+								원본 이미지 다운로드
+							</a>
+						</p>
+					</div>
 				</c:if>
 				<div>
 					<a href="delete?id=${board.id}" class="btn btn-info">삭제</a>

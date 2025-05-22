@@ -36,5 +36,10 @@ public class UserServiceImpl implements UserService {
 		User tmp = userDao.selectOne(info);
 		return tmp;
 	}
+	
+	@Override
+	public int checkUserId(String id) {
+	    return userDao.checkUserId(id);
+	}
 
 }

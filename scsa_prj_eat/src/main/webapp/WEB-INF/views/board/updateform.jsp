@@ -11,7 +11,7 @@
 	<div class="container">
 		<h2>맛집 정보 수정</h2>
 		<%@ include file="../common/header.jsp"%>
-		<form action="update" method="POST">
+		<form action="update" method="POST" enctype="multipart/form-data">
 			<input type="hidden" name="id" value="${board.id}">
 			<div class="mb-3">
 				<label for="title" class="form-label">식당 이름</label>
@@ -36,6 +36,25 @@
 			<div class="mb-3">
 				<label for="price" class="form-label">가격대</label>
 				<input type="number" class="form-control" id="price" name="price" value="${board.price}" required>
+			</div>
+			<div class="mb-3">
+				<label for="attach" class="form-label">이미지</label>
+				<c:if test="${not empty board.boardFile}">
+					<div class="mb-2">
+						<img src="/img${board.boardFile.filePath}/${board.boardFile.systemName}" 
+							class="img-thumbnail" 
+							style="max-width: 200px; max-height: 200px;"
+							alt="${board.boardFile.oriName}">
+						<p class="mt-1">
+							<a href="/download?oriName=${board.boardFile.oriName}&systemName=${board.boardFile.systemName}&filePath=${board.boardFile.filePath}" 
+								class="btn btn-sm btn-outline-secondary">
+								현재 이미지 다운로드
+							</a>
+						</p>
+					</div>
+				</c:if>
+				<input type="file" class="form-control" id="attach" name="attach" accept="image/*">
+				<small class="form-text text-muted">새 이미지를 선택하면 기존 이미지가 대체됩니다.</small>
 			</div>
 			<button type="submit" class="btn btn-primary">수정</button>
 		</form>

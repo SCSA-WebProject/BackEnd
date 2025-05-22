@@ -5,9 +5,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ssafy.mvc.model.dto.User;
-import com.ssafy.mvc.model.service.UserService;
 import com.ssafy.mvc.model.service.UserServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
@@ -74,5 +75,14 @@ public class UserController {
 	}
 
 
-
+	@GetMapping("/checkId")
+	@ResponseBody
+	public String checkUserId(@RequestParam("id") String id) {
+	    int count = userService.checkUserId(id);
+	    if (count > 0) {
+	        return "duplicate";
+	    } else {
+	        return "available";
+	    }
+	}
 }

@@ -4,31 +4,42 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.mvc.model.dao.UserDao">
 	<resultMap id="userMap" type="com.ssafy.mvc.model.dto.User">
-		<id property="id" column="id"/>
-		<result property="password" column="password"/>
-		<result property="name" column="name"/>
-		<result property="phone" column="phone"/>
-		<result property="companyCode" column="companyCode"/>
-		<result property="companyName" column="companyName"/>
+		<id property="id" column="id" />
+		<result property="password" column="password" />
+		<result property="name" column="name" />
+		<result property="phone" column="phone" />
+		<result property="companyCode" column="companyCode" />
+		<result property="companyName" column="companyName" />
 	</resultMap>
 
 	<select id="selectOne" parameterType="Map" resultMap="userMap">
-		SELECT u.id, u.password, u.name, u.phone, c.code as companyCode, c.name as companyName
+		SELECT
+		u.id, u.password, u.name, u.phone, c.code as companyCode, c.name as
+		companyName
 		FROM users u
 		LEFT JOIN company c ON u.company_code = c.code
 		WHERE u.id = #{id} AND u.password = #{password}
 	</select>
-	
+
 	<select id="selectAll" resultMap="userMap">
-		select u.id, u.password, u.name, u.phone, 
-		       c.name as companyName, c.code as companyCode
+		select u.id, u.password,
+		u.name, u.phone,
+		c.name as companyName, c.code as companyCode
 		from users u, company c
-		where u.company_code = c.code
+		where
+		u.company_code = c.code
 	</select>
-	
+
 	<!-- 회원가입 -->
-	<insert id="insertUser" parameterType="com.ssafy.mvc.model.dto.User">
-		INSERT INTO users (id, password, name, phone, company_code)
-		VALUES (#{id}, #{password}, #{name}, #{phone}, #{companyCode})
+	<insert id="insertUser"
+		parameterType="com.ssafy.mvc.model.dto.User">
+		INSERT INTO users (id, password, name, phone,
+		company_code)
+		VALUES (#{id}, #{password}, #{name}, #{phone},
+		#{companyCode})
 	</insert>
+
+	<select id="checkUserId" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM users WHERE id = #{id}
+	</select>
 </mapper>

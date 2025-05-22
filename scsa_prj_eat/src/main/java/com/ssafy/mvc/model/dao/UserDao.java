@@ -11,4 +11,7 @@ public interface UserDao {
 	public void insertUser(User user);
 
 	public User selectOne(Map<String, String> info);
+	
+	
+	public int checkUserId(String id);
 }

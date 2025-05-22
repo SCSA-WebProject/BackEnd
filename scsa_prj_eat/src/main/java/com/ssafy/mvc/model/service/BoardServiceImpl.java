@@ -26,6 +26,9 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Map<String, Object> getBoardList(BoardSearch boardSearch) {
 		List<Board> list = boardDao.selectAll(boardSearch);
+		for (Board board : list) {
+			board.setBoardFile(boardDao.selectBoardFileByNo(board.getId()));
+		}
 		Map<String, Object> result = new HashMap<>();
 		result.put("list", list);
 		result.put("pr", new PageResult(boardSearch.getPage(), boardDao.selectBoardCount(boardSearch),
@@ -44,10 +47,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	@Transactional
 	public void writeBoard(Board board) {
+		boardDao.insertBoard(board);
 		if (board.getBoardFile() != null) {
+			board.getBoardFile().setId(board.getId());
 			boardDao.insertBoardFile(board.getBoardFile());
 		}
-		boardDao.insertBoard(board);
 	}
 
 	@Override
