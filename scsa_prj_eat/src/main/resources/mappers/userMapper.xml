@@ -3,22 +3,32 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.mvc.model.dao.UserDao">
-	<select id="selectOne" parameterType="Map" resultType="User">
-		SELECT ID, NAME FROM USERS
-		WHERE ID = #{id} AND PASSWORD = #{password}
+	<resultMap id="userMap" type="com.ssafy.mvc.model.dto.User">
+		<id property="id" column="id"/>
+		<result property="password" column="password"/>
+		<result property="name" column="name"/>
+		<result property="phone" column="phone"/>
+		<result property="companyCode" column="companyCode"/>
+		<result property="companyName" column="companyName"/>
+	</resultMap>
+
+	<select id="selectOne" parameterType="Map" resultMap="userMap">
+		SELECT u.id, u.password, u.name, u.phone, c.code as companyCode, c.name as companyName
+		FROM users u
+		LEFT JOIN company c ON u.company_code = c.code
+		WHERE u.id = #{id} AND u.password = #{password}
 	</select>
 	
-	<select id="selectAll" resultType="User">
-	select u.id id, u.password password, u.name name, c.name curriculumName 
-	from users u, curriculum c
-	where u.curriculum_code = c.code
+	<select id="selectAll" resultMap="userMap">
+		select u.id, u.password, u.name, u.phone, 
+		       c.name as companyName, c.code as companyCode
+		from users u, company c
+		where u.company_code = c.code
 	</select>
 	
 	<!-- 회원가입 -->
-	<insert id="insertUser" parameterType="User"> <!-- paramete map은 안씀 -->
-		INSERT INTO users (id,
-		password, name, curriculum_code)
-		VALUES (#{id}, #{password}, #{name}, #{curriculumCode});
-	
+	<insert id="insertUser" parameterType="com.ssafy.mvc.model.dto.User">
+		INSERT INTO users (id, password, name, phone, company_code)
+		VALUES (#{id}, #{password}, #{name}, #{phone}, #{companyCode})
 	</insert>
 </mapper>

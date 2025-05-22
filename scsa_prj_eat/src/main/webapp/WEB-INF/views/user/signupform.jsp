@@ -24,17 +24,19 @@
 				<input type="text" class="form-control" id="name" name="name">
 			</div>
 			<div class="mb-3">
-				<label for="curriculum" class="form-label">트랙</label>
-				<select name="curriculumCode" class="form-select" id="curriculum">
-					<option value="100">Python</option>
-					<option value="200">Java</option>
-					<option value="300">Embedded</option>
-					<option value="400">Mobile</option>
+				<label for="phone" class="form-label">전화번호</label>
+				<input type="tel" class="form-control" id="phone" name="phone" placeholder="010-0000-0000">
+			</div>
+			<div class="mb-3">
+				<label for="company" class="form-label">회사</label>
+				<select name="companyCode" class="form-select" id="company">
+					<option value="100">dx</option>
+					<option value="200">ds</option>
+					<option value="300">sds</option>
 				</select>
 			</div>
 			<button class="btn btn-primary">회원가입</button>
 		</form>
-	
 	</div>
 </body>
 </html>

@@ -4,8 +4,9 @@ public class User {
 	private String id;
 	private String password;
 	private String name;
-	private int curriculumCode;
-	private String curriculumName;
+	private String phone;
+	private int companyCode;
+	private String companyName;
 
 	public String getId() {
 		return id;
@@ -31,20 +32,28 @@ public class User {
 		this.name = name;
 	}
 
-	public int getCurriculumCode() {
-		return curriculumCode;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setCurriculumCode(int curriculumCode) {
-		this.curriculumCode = curriculumCode;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
-	public String getCurriculumName() {
-		return curriculumName;
+	public int getCompanyCode() {
+		return companyCode;
 	}
 
-	public void setCurriculumName(String curriculumName) {
-		this.curriculumName = curriculumName;
+	public void setCompanyCode(int companyCode) {
+		this.companyCode = companyCode;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
 }

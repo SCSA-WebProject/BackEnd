@@ -19,14 +19,16 @@
 					<th>ID</th>
 					<th>PW</th>
 					<th>NAME</th>
-					<th>CURRICULUM</th>
+					<th>PHONE</th>
+					<th>COMPANY</th>
 				</tr>
 				<c:forEach items="${userList}" var="user">
 					<tr>
 						<td>${user.id}</td>
 						<td>${user.password}</td>
 						<td>${user.name}</td>
-						<td>${user.curriculumName}</td>
+						<td>${user.phone}</td>
+						<td>${user.companyName}</td>
 					</tr>
 				</c:forEach>
 			</table>
@@ -35,7 +37,6 @@
 				<a class="btn btn-outline-primary" href="${pageContext.request.contextPath}/list">홈으로</a>
 			</div>
 		</div>
-		
 	</div>
 </body>
 </html>

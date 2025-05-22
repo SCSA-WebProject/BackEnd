@@ -1,11 +1,14 @@
+-- 기존 데이터베이스 삭제
+DROP DATABASE IF EXISTS ssafy_board;
+
 -- ssafy_board 데이터베이스 생성
 CREATE DATABASE IF NOT EXISTS ssafy_board;
 USE ssafy_board;
 
--- 트랙 정보를 저장하는 curriculum 테이블
-CREATE TABLE curriculum (
+-- 회사 정보를 저장하는 company 테이블
+CREATE TABLE company (
     code INT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
+    name VARCHAR(50) NOT NULL CHECK (name IN ('dx', 'ds', 'sds'))
 );
 
 -- 사용자 정보를 저장하는 users 테이블
@@ -13,8 +16,9 @@ CREATE TABLE users (
     id VARCHAR(50) PRIMARY KEY,
     password VARCHAR(100) NOT NULL,
     name VARCHAR(50) NOT NULL,
-    curriculum_code INT,
-    FOREIGN KEY (curriculum_code) REFERENCES curriculum(code)
+    phone VARCHAR(20),
+    company_code INT,
+    FOREIGN KEY (company_code) REFERENCES company(code)
 );
 
 -- 맛집 정보를 저장하는 board 테이블
@@ -37,16 +41,15 @@ CREATE TABLE board_file (
 );
 
 -- 초기 데이터 삽입
--- curriculum 테이블 데이터
-INSERT INTO curriculum (code, name) VALUES 
-(100, 'Python'),
-(200, 'Java'),
-(300, 'Embedded'),
-(400, 'Mobile');
+-- company 테이블 데이터
+INSERT INTO company (code, name) VALUES 
+(100, 'dx'),
+(200, 'ds'),
+(300, 'sds');
 
 -- 관리자 계정 생성
-INSERT INTO users (id, password, name, curriculum_code) VALUES 
-('admin', 'admin', '관리자', 200);
+INSERT INTO users (id, password, name, phone, company_code) VALUES 
+('admin', 'admin', '관리자', '010-1234-5678', 200);
 
 -- 샘플 맛집 데이터
 INSERT INTO board (title, region, category, price) VALUES 
