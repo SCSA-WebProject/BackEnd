@@ -41,7 +41,7 @@
 				<label for="attach" class="form-label">이미지</label>
 				<c:if test="${not empty board.boardFile}">
 					<div class="mb-2">
-						<img src="/img${board.boardFile.filePath}/${board.boardFile.systemName}" 
+						<img src="${pageContext.request.contextPath}/img${board.boardFile.filePath}/${board.boardFile.systemName}" 
 							class="img-thumbnail" 
 							style="max-width: 200px; max-height: 200px;"
 							alt="${board.boardFile.oriName}">
