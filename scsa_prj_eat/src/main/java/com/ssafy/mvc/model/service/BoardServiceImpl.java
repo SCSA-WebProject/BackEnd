@@ -57,9 +57,16 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	@Transactional
 	public void modifyBoard(Board board) {
-		boardDao.updateBoard(board);
-	}
+	    boardDao.updateBoard(board);
 
+	    if (board.getBoardFile() != null) {
+	        // 기존 파일 삭제 로직이 필요하다면 먼저 삭제
+	        // boardDao.deleteBoardFileByBoardId(board.getId()); // 선택사항
+
+	        board.getBoardFile().setId(board.getId());
+	        boardDao.insertBoardFile(board.getBoardFile()); // 새 파일 INSERT
+	    }
+	}
 	@Override
 	@Transactional
 	public void removeBoard(int id) {
