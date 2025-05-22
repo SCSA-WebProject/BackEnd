@@ -51,13 +51,25 @@ public class BoardController {
 	@PostMapping("write")
 	public String write(@RequestParam("attach") MultipartFile attach, @ModelAttribute Board board) throws IllegalStateException, IOException {
 		String oriName = attach.getOriginalFilename();
-		if (oriName.length() > 0) {
+		if (oriName != null && oriName.length() > 0) {
 			String subDir = new SimpleDateFormat("/yyyy/MM/dd/HH").format(new Date());
-			Resource resource = resourceLoader.getResource("classpath:/static/img");
-			File dir = new File(resource.getFile() + subDir);
-			dir.mkdirs();
-			String systemName = UUID.randomUUID().toString() + oriName;
-			attach.transferTo(new File(dir, systemName));
+			String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/img";
+			File uploadDir = new File(uploadPath);
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs();
+			}
+			
+			File subDirFile = new File(uploadPath + subDir);
+			if (!subDirFile.exists()) {
+				subDirFile.mkdirs();
+			}
+			
+			String systemName = UUID.randomUUID().toString() + "_" + oriName;
+			File dest = new File(subDirFile, systemName);
+			attach.transferTo(dest);
+			
+			System.out.println("이미지 저장 경로: " + dest.getAbsolutePath());
+			System.out.println("이미지 URL 경로: " + subDir + "/" + systemName);
 
 			BoardFile boardFile = new BoardFile();
 			boardFile.setFilePath(subDir);
@@ -90,7 +102,28 @@ public class BoardController {
 	}
 
 	@PostMapping("update")
-	public String update(@ModelAttribute Board board) {
+	public String update(@RequestParam(value = "attach", required = false) MultipartFile attach, @ModelAttribute Board board) throws IllegalStateException, IOException {
+		if (attach != null && !attach.isEmpty()) {
+			String oriName = attach.getOriginalFilename();
+			String subDir = new SimpleDateFormat("/yyyy/MM/dd/HH").format(new Date());
+			String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/img";
+			
+			File subDirFile = new File(uploadPath + subDir);
+			if (!subDirFile.exists()) {
+				subDirFile.mkdirs();
+			}
+			
+			String systemName = UUID.randomUUID().toString() + "_" + oriName;
+			File dest = new File(subDirFile, systemName);
+			attach.transferTo(dest);
+
+			BoardFile boardFile = new BoardFile();
+			boardFile.setFilePath(subDir);
+			boardFile.setOriName(oriName);
+			boardFile.setSystemName(systemName);
+			boardFile.setId(board.getId());
+			board.setBoardFile(boardFile);
+		}
 		boardService.modifyBoard(board);
 		return "redirect:detail?id=" + board.getId();
 	}
@@ -99,13 +132,5 @@ public class BoardController {
 	public String search(@ModelAttribute SearchCondition condition, Model model) {
 		model.addAttribute("boards", boardService.searchBoard(condition));
 		return "/board/list";
-	}
-	
-	@GetMapping("/download")
-	public String fileDownload(BoardFile boardFile, Model model) {
-		model.addAttribute("oriName", boardFile.getOriName());
-		model.addAttribute("systemName", boardFile.getSystemName());
-		model.addAttribute("filePath", boardFile.getFilePath());
-		return "fileDownloadView";
 	}
 }

@@ -21,6 +21,7 @@
 				<input type="password" class="form-control" id="password" name="password">
 			</div>
 			<button class="btn btn-primary">로그인</button>
+			<a href="signup" class="btn btn-secondary">회원가입</a>
 		</form>
 	</div>
 </body>

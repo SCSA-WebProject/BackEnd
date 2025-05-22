@@ -23,6 +23,7 @@
 		<table class="table text-container">
 			<tr>
 				<th>번호</th>
+				<th>이미지</th>
 				<th>식당 이름</th>
 				<th>지역</th>
 				<th>카테고리</th>
@@ -31,6 +32,19 @@
 			<c:forEach items="${boards}" var="board">
 				<tr>
 					<td>${board.id}</td>
+					<td>
+						<c:if test="${not empty board.boardFile}">
+							<img src="/img${board.boardFile.filePath}/${board.boardFile.systemName}" 
+								class="img-thumbnail" 
+								style="width: 100px; height: 100px; object-fit: cover;"
+								alt="${board.boardFile.oriName}"
+								onerror="this.onerror=null; this.src='/img/default.jpg';">
+							<!-- 디버깅용 정보 -->
+							<c:if test="${empty board.boardFile.filePath}">
+								<small class="text-danger">이미지 경로 없음</small>
+							</c:if>
+						</c:if>
+					</td>
 					<td><a href="detail?id=${board.id}">${board.title}</a></td>
 					<td>${board.region}</td>
 					<td>${board.category}</td>
