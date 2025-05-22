@@ -40,6 +40,15 @@ CREATE TABLE board_file (
     FOREIGN KEY (id) REFERENCES board(id) ON DELETE CASCADE
 );
 
+CREATE TABLE diary (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    date DATE,
+    context TEXT,
+    user_id VARCHAR(50),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 -- 초기 데이터 삽입
 -- company 테이블 데이터
 INSERT INTO company (code, name) VALUES 
