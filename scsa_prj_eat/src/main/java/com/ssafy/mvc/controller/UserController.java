@@ -1,0 +1,78 @@
+package com.ssafy.mvc.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.ssafy.mvc.model.dto.User;
+import com.ssafy.mvc.model.service.UserService;
+import com.ssafy.mvc.model.service.UserServiceImpl;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class UserController {
+	private final UserServiceImpl userService;
+
+//	@Autowired
+	public UserController(UserServiceImpl userService) {
+		this.userService = userService;
+	}
+	
+	@GetMapping("/")
+	public String home() {
+	    return "redirect:/login";
+	}
+
+	@GetMapping("/login")
+	public String loginForm() {
+		return "/user/loginform";
+	}
+
+	@PostMapping("/login")
+	public String login(@ModelAttribute User user, HttpSession session) {
+		User tmp = userService.login(user.getId(), user.getPassword());
+		// tmp : 정상로그인 -> User 정보
+		// 		비정상로그인 -> null
+		if(tmp==null) {
+			return "redirect:list"; // 로그인 화면으로 보내기(GET)
+		}
+		
+		// 로그인 제대로 됐을 때 실행되는 코드
+		session.setAttribute("loginUser", tmp.getName());
+		return "redirect:list";
+	}
+	
+	// 로그아웃
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+	    // 세션 무효화
+	    session.invalidate();
+	    // 로그인 페이지로 리다이렉트
+	    return "redirect:login";
+	}
+	
+	@GetMapping("/users")
+	public String userList(Model model) {
+		model.addAttribute("userList", userService.getUserList());
+		return "/user/adminPage";
+	}
+	
+
+	// 회원가입 -> 실습시간에 만들어보기
+	@GetMapping("/signup")
+	public String signupform() {
+		return "/user/signupform";
+	}
+	
+	@PostMapping("signup")
+	public String signup(@ModelAttribute User user) {
+		userService.signup(user);
+		return "redirect:login";
+	}
+
+
+
+}
