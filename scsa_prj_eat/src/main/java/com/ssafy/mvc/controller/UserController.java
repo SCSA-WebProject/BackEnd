@@ -33,17 +33,20 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public String login(@ModelAttribute User user, HttpSession session) {
+	public String login(@ModelAttribute User user, HttpSession session, Model model) {
 		User tmp = userService.login(user.getId(), user.getPassword());
 		// tmp : 정상로그인 -> User 정보
 		// 		비정상로그인 -> null
 		if(tmp==null) {
-			return "redirect:list"; // 로그인 화면으로 보내기(GET)
+			model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다.");
+			return "/user/loginform"; // 로그인 화면으로 보내기
 		}
 		
 		// 로그인 제대로 됐을 때 실행되는 코드
+
 		session.setAttribute("loginUser", tmp.getName());
 		session.setAttribute("loginUserId", tmp.getId());
+
 		return "redirect:list";
 	}
 	

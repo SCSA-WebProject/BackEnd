@@ -10,6 +10,11 @@
 <body>
 	<div class="container">
 		<h2>로그인</h2>
+		<% if(request.getAttribute("error") != null) { %>
+			<div class="alert alert-danger" role="alert">
+				<%= request.getAttribute("error") %>
+			</div>
+		<% } %>
 		<form action="login" method="POST">
 			<div class="mb-3">
 				<label for="id" class="form-label">ID</label>

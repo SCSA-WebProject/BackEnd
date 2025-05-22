@@ -27,7 +27,9 @@ CREATE TABLE board (
     title VARCHAR(200) NOT NULL,
     region VARCHAR(200),
     category VARCHAR(200),
-    price INT
+    price INT,
+    user_id VARCHAR(50),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- 첨부 파일 정보를 저장하는 board_file 테이블
@@ -61,10 +63,10 @@ INSERT INTO users (id, password, name, phone, company_code) VALUES
 ('admin', 'admin', '관리자', '010-1234-5678', 200);
 
 -- 샘플 맛집 데이터
-INSERT INTO board (title, region, category, price) VALUES 
-('청진동 해장국', '서울 종로구', '한식', 15000),
-('이탈리안 레스토랑', '서울 강남구', '양식', 35000),
-('홍콩반점', '서울 서초구', '중식', 20000),
-('스시코우지', '서울 송파구', '일식', 45000),
-('태국음식점', '서울 마포구', '아시안', 25000),
-('술집 나무', '서울 용산구', '술집', 30000);
+INSERT INTO board (title, region, category, price, user_id) VALUES 
+('청진동 해장국', '서울 종로구', '한식', 15000, 'admin'),
+('이탈리안 레스토랑', '서울 강남구', '양식', 35000, 'admin'),
+('홍콩반점', '서울 서초구', '중식', 20000, 'admin'),
+('스시코우지', '서울 송파구', '일식', 45000, 'admin'),
+('태국음식점', '서울 마포구', '아시안', 25000, 'admin'),
+('술집 나무', '서울 용산구', '술집', 30000, 'admin');

@@ -20,6 +20,7 @@
 					<div class="card-subtitle">카테고리: ${board.category}</div>
 					<div class="card-subtitle">가격대: ${board.price}원</div>
 				</div>
+				<div class="card-subtitle mb-3">작성자: ${board.userId}</div>
 				<c:if test="${not empty board.boardFile}">
 					<div class="mt-3">
 						<img src="/img${board.boardFile.filePath}/${board.boardFile.systemName}" 
@@ -29,8 +30,10 @@
 					</div>
 				</c:if>
 				<div>
-					<a href="delete?id=${board.id}" class="btn btn-info">삭제</a>
-					<a href="updateform?id=${board.id}" class="btn btn-success">수정</a>
+					<c:if test="${sessionScope.loginUser eq board.userId}">
+						<a href="delete?id=${board.id}" class="btn btn-info">삭제</a>
+						<a href="updateform?id=${board.id}" class="btn btn-success">수정</a>
+					</c:if>
 					<a href="list" class="btn btn-warning">목록</a>
 				</div>
 			</div>

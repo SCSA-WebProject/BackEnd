@@ -6,7 +6,16 @@ public class Board {
 	private String region;
 	private String category;
 	private int price;
+	private String userId;
 	private BoardFile boardFile;
+	
+	public String getUserId() {
+		return userId;
+	}
+	
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	
 	public BoardFile getBoardFile() {
 		return boardFile;
@@ -18,20 +27,22 @@ public class Board {
 	public Board() {
 	}
 
-	public Board(String title, String region, String category, int price) {
+	public Board(String title, String region, String category, int price, String userId) {
 		super();
 		this.title = title;
 		this.region = region;
 		this.category = category;
 		this.price = price;
+		this.userId = userId;
 	}
 
-	public Board(int id, String title, String region, String category, int price) {
+	public Board(int id, String title, String region, String category, int price, String userId) {
 		this.id = id;
 		this.title = title;
 		this.region = region;
 		this.category = category;
 		this.price = price;
+		this.userId = userId;
 	}
 
 	public int getId() {
