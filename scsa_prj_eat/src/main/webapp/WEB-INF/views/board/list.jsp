@@ -40,7 +40,7 @@
 		</table>
 		<div class="d-flex justify-content-end">
 			<a class="btn btn-outline-primary" href="/writeform">맛집 등록</a>
-			<a class="btn btn-outline-success" href="/diary">맛집 살펴보기</a>
+			<a class="btn btn-outline-success" href="../diary/list">맛집 살펴보기</a>
 		</div>
 		<c:if test="${pr.prev}">
 			<a href="list?page=1">[첫페이지]</a>
