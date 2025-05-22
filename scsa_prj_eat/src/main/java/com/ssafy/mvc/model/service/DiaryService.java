@@ -8,6 +8,9 @@ public interface DiaryService {
     // 전체 일기 조회
     List<Diary> getDiaryList();
 
+    // 유저 일기 조회
+    List<Diary> getDiaryListByUser(String userId);
+    
     // 단일 일기 조회
     Diary readDiary(int id);
 

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.mvc.model.dao.DiaryDao;
 import com.ssafy.mvc.model.dto.Diary;
+import com.ssafy.mvc.model.dto.User;
 
 @Service
 public class DiaryServiceImpl implements DiaryService {
@@ -22,6 +23,11 @@ public class DiaryServiceImpl implements DiaryService {
         return diaryDao.selectAll();
     }
 
+	@Override
+	public List<Diary> getDiaryListByUser(String userId) {
+		return diaryDao.selectByUser(userId);
+	}
+	
     @Override
     public Diary readDiary(int id) {
         System.out.println(id + "번 일기를 읽어옵니다.");

@@ -24,11 +24,11 @@ function checkId() {
             if (result === "duplicate") {
                 alert("이미 사용 중인 아이디입니다.");
                 isIdAvailable = false;
-                document.getElementById("id").disabled = false;
+                document.getElementById("id").readonly = false;
             } else {
                 alert("사용 가능한 아이디입니다.");
                 isIdAvailable = true;
-                document.getElementById("id").disabled = true;
+                document.getElementById("id").readonly = true;
             }
             isIdChecked = true;
             validateForm();

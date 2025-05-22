@@ -8,6 +8,9 @@ public interface DiaryDao {
     // 전체 일기 목록
     List<Diary> selectAll();
 
+    // 유저 일기 목록
+    List<Diary> selectByUser(String userId);
+    
     // 단일 일기 조회
     Diary selectOne(int id);
 
