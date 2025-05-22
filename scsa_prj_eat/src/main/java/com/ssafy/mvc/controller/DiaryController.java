@@ -2,6 +2,9 @@ package com.ssafy.mvc.controller;
 
 import com.ssafy.mvc.model.dto.Diary;
 import com.ssafy.mvc.model.service.DiaryService;
+
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +23,11 @@ public class DiaryController {
 
     // 1. 전체 일기 목록 조회
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Diary> list = diaryService.getDiaryList();
+    public String list(HttpSession session, Model model) {
+    	String userId = (String) session.getAttribute("loginUserId");
+        if (userId == null) return "redirect:/login";
+        
+        List<Diary> list = diaryService.getDiaryListByUser(userId);
         model.addAttribute("list", list);
         return "diary/list"; // -> /WEB-INF/views/diary/list.jsp
     }
@@ -42,8 +48,12 @@ public class DiaryController {
 
     // 4. 일기 작성 처리
     @PostMapping("/write")
-    public String write(@ModelAttribute Diary diary) {
-        diaryService.writeDiary(diary);
+    public String write(@ModelAttribute Diary diary, HttpSession session) {
+        String userId= (String) session.getAttribute("loginUserId");
+        if (userId == null) return "redirect:/login";
+        
+        diary.setUserId(userId);
+    	diaryService.writeDiary(diary);
         return "redirect:/diary/list";
     }
 

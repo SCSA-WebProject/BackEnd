@@ -43,6 +43,7 @@ public class UserController {
 		
 		// 로그인 제대로 됐을 때 실행되는 코드
 		session.setAttribute("loginUser", tmp.getName());
+		session.setAttribute("loginUserId", tmp.getId());
 		return "redirect:list";
 	}
 	
