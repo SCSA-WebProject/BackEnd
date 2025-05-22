@@ -11,10 +11,11 @@
 		<result column="region" property="region"/>
 		<result column="category" property="category"/>
 		<result column="price" property="price"/>
+		<result column="user_id" property="userId"/>
 	</resultMap>
 	<!-- 전체 맛집 목록 조회 -->
 	<select id="selectAll" resultMap="boardMap">
-		SELECT id, title, region, category, price
+		SELECT id, title, region, category, price, user_id
 		FROM BOARD
 		ORDER BY ID DESC
 		LIMIT #{offset}, #{listSize}
@@ -27,15 +28,15 @@
 
 	<!-- 상세 맛집 조회 -->
 	<select id="selectOne" resultMap="boardMap" parameterType="int">
-		SELECT id, title, region, category, price
+		SELECT id, title, region, category, price, user_id
 		FROM BOARD
 		WHERE id = #{id}
 	</select>
 
 	<!-- 맛집 등록 -->
 	<insert id="insertBoard" parameterType="Board" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO BOARD (title, region, category, price)
-		VALUES (#{title}, #{region}, #{category}, #{price})
+		INSERT INTO BOARD (title, region, category, price, user_id)
+		VALUES (#{title}, #{region}, #{category}, #{price}, #{userId})
 	</insert>
 
 	<!-- 맛집 삭제 -->
@@ -51,12 +52,12 @@
 			region = #{region},
 			category = #{category},
 			price = #{price}
-		WHERE id = #{id}
+		WHERE id = #{id} AND user_id = #{userId}
 	</update>
 
 	<!-- 검색기능 -->
 	<select id="selectByWhere" resultMap="boardMap" parameterType="SearchCondition">
-		SELECT id, title, region, category, price
+		SELECT id, title, region, category, price, user_id
 		FROM BOARD
 		<where>
 			<choose>

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +22,8 @@ import com.ssafy.mvc.model.dto.BoardFile;
 import com.ssafy.mvc.model.dto.BoardSearch;
 import com.ssafy.mvc.model.dto.SearchCondition;
 import com.ssafy.mvc.model.service.BoardService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class BoardController {
@@ -44,12 +45,22 @@ public class BoardController {
 	}
 
 	@GetMapping("/writeform")
-	public String writeform() {
+	public String writeform(HttpSession session) {
+		String userId = (String) session.getAttribute("loginUser");
+		if (userId == null) {
+			return "redirect:/login";
+		}
 		return "/board/writeform";
 	}
 
 	@PostMapping("write")
-	public String write(@RequestParam("attach") MultipartFile attach, @ModelAttribute Board board) throws IllegalStateException, IOException {
+	public String write(@RequestParam("attach") MultipartFile attach, @ModelAttribute Board board, HttpSession session) throws IllegalStateException, IOException {
+		String userId = (String) session.getAttribute("loginUser");
+		if (userId == null) {
+			return "redirect:/login";
+		}
+		board.setUserId(userId);
+		
 		String oriName = attach.getOriginalFilename();
 		if (oriName != null && oriName.length() > 0) {
 			String subDir = new SimpleDateFormat("/yyyy/MM/dd/HH").format(new Date());
@@ -89,20 +100,51 @@ public class BoardController {
 	}
 
 	@GetMapping("/delete")
-	public String delete(@RequestParam("id") int id) {
+	public String delete(@RequestParam("id") int id, HttpSession session) {
+		String userId = (String) session.getAttribute("loginUser");
+		if (userId == null) {
+			return "redirect:/login";
+		}
+		
+		Board board = boardService.readBoard(id);
+		if (board == null || !board.getUserId().equals(userId)) {
+			return "redirect:/list";
+		}
+		
 		boardService.removeBoard(id);
 		return "redirect:list";
 	}
 
 	@GetMapping("updateform")
-	public String updateform(@RequestParam("id") int id, Model model) {
+	public String updateform(@RequestParam("id") int id, Model model, HttpSession session) {
+		String userId = (String) session.getAttribute("loginUser");
+		if (userId == null) {
+			return "redirect:/login";
+		}
+		
 		Board board = boardService.readBoard(id);
+		if (board == null || !board.getUserId().equals(userId)) {
+			return "redirect:/list";
+		}
+		
 		model.addAttribute("board", board);
 		return "/board/updateform";
 	}
 
 	@PostMapping("update")
-	public String update(@RequestParam(value = "attach", required = false) MultipartFile attach, @ModelAttribute Board board) throws IllegalStateException, IOException {
+	public String update(@RequestParam(value = "attach", required = false) MultipartFile attach, @ModelAttribute Board board, HttpSession session) throws IllegalStateException, IOException {
+		String userId = (String) session.getAttribute("loginUser");
+		if (userId == null) {
+			return "redirect:/login";
+		}
+		
+		Board existingBoard = boardService.readBoard(board.getId());
+		if (existingBoard == null || !existingBoard.getUserId().equals(userId)) {
+			return "redirect:/list";
+		}
+		
+		board.setUserId(userId);
+		
 		if (attach != null && !attach.isEmpty()) {
 			String oriName = attach.getOriginalFilename();
 			String subDir = new SimpleDateFormat("/yyyy/MM/dd/HH").format(new Date());
