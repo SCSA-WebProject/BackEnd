@@ -83,6 +83,8 @@
 		SELECT file_id, id, file_path, ori_name, system_name
 		FROM BOARD_FILE
 		WHERE id = #{id}
+		ORDER BY file_id DESC
+		LIMIT 1
 	</select>
 
 	<insert id="insertBoardFile" parameterType="BoardFile">

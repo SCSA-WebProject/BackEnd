@@ -133,12 +133,4 @@ public class BoardController {
 		model.addAttribute("boards", boardService.searchBoard(condition));
 		return "/board/list";
 	}
-	
-	@GetMapping("/download")
-	public String fileDownload(BoardFile boardFile, Model model) {
-		model.addAttribute("oriName", boardFile.getOriName());
-		model.addAttribute("systemName", boardFile.getSystemName());
-		model.addAttribute("filePath", boardFile.getFilePath());
-		return "fileDownloadView";
-	}
 }

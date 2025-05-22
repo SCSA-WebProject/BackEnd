@@ -26,12 +26,6 @@
 							class="img-fluid rounded" 
 							style="max-width: 500px; max-height: 500px;"
 							alt="${board.boardFile.oriName}">
-						<p class="mt-2">
-							<a href="/download?oriName=${board.boardFile.oriName}&systemName=${board.boardFile.systemName}&filePath=${board.boardFile.filePath}" 
-								class="btn btn-sm btn-outline-secondary">
-								원본 이미지 다운로드
-							</a>
-						</p>
 					</div>
 				</c:if>
 				<div>

@@ -45,12 +45,6 @@
 							class="img-thumbnail" 
 							style="max-width: 200px; max-height: 200px;"
 							alt="${board.boardFile.oriName}">
-						<p class="mt-1">
-							<a href="/download?oriName=${board.boardFile.oriName}&systemName=${board.boardFile.systemName}&filePath=${board.boardFile.filePath}" 
-								class="btn btn-sm btn-outline-secondary">
-								현재 이미지 다운로드
-							</a>
-						</p>
 					</div>
 				</c:if>
 				<input type="file" class="form-control" id="attach" name="attach" accept="image/*">
