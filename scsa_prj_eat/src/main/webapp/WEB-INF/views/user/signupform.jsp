@@ -85,6 +85,10 @@ window.onload = function() {
 				<input type="text" class="form-control" id="name" name="name" required>
 			</div>
 			<div class="mb-3">
+				<label for="classNum" class="form-label">SCSA 기수</label>
+				<input type="text" class="form-control" id="classNum" name="classNum" placeholder="24" required>
+			</div>
+			<div class="mb-3">
 				<label for="phone" class="form-label">전화번호</label>
 				<input type="tel" class="form-control" id="phone" name="phone" placeholder="010-0000-0000" required>
 			</div>

@@ -16,6 +16,7 @@ CREATE TABLE users (
     id VARCHAR(50) PRIMARY KEY,
     password VARCHAR(100) NOT NULL,
     name VARCHAR(50) NOT NULL,
+    class int NOT NULL,
     phone VARCHAR(20),
     company_code INT,
     FOREIGN KEY (company_code) REFERENCES company(code)
@@ -59,8 +60,8 @@ INSERT INTO company (code, name) VALUES
 (300, 'sds');
 
 -- 관리자 계정 생성
-INSERT INTO users (id, password, name, phone, company_code) VALUES 
-('admin', 'admin', '관리자', '010-1234-5678', 200);
+INSERT INTO users (id, password, name, class, phone, company_code) VALUES 
+('admin', 'admin', '관리자', 24, '010-1234-5678', 200);
 
 -- 샘플 맛집 데이터
 INSERT INTO board (title, region, category, price, user_id) VALUES 

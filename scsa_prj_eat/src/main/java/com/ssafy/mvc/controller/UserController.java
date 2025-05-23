@@ -46,7 +46,6 @@ public class UserController {
 
 		session.setAttribute("loginUser", tmp.getName());
 		session.setAttribute("loginUserId", tmp.getId());
-
 		return "redirect:list";
 	}
 	
