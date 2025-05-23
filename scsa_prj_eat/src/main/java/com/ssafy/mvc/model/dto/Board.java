@@ -8,6 +8,8 @@ public class Board {
 	private int price;
 	private String userId;
 	private BoardFile boardFile;
+	private boolean liked;
+	private int likeCount;
 	
 	public String getUserId() {
 		return userId;
@@ -83,6 +85,22 @@ public class Board {
 
 	public void setPrice(int price) {
 		this.price = price;
+	}
+
+	public boolean isLiked() {
+		return liked;
+	}
+
+	public void setLiked(boolean liked) {
+		this.liked = liked;
+	}
+
+	public int getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
 	}
 
 	@Override

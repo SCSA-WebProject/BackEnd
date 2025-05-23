@@ -92,4 +92,25 @@
 		INSERT INTO BOARD_FILE (file_path, ori_name, system_name, id)
 		VALUES (#{filePath}, #{oriName}, #{systemName}, #{id})
 	</insert>
+
+	<!-- 좋아요 토글 -->
+	<insert id="toggleLike" parameterType="map">
+		INSERT INTO Users_Board_likes (board_id, user_id, liked)
+		VALUES (#{boardId}, #{userId}, true)
+		ON DUPLICATE KEY UPDATE liked = NOT liked
+	</insert>
+
+	<!-- 좋아요 상태 확인 -->
+	<select id="checkLike" resultType="boolean" parameterType="map">
+		SELECT COALESCE(liked, false)
+		FROM Users_Board_likes
+		WHERE board_id = #{boardId} AND user_id = #{userId}
+	</select>
+
+	<!-- 좋아요 수 조회 -->
+	<select id="getLikeCount" resultType="int" parameterType="int">
+		SELECT COUNT(*)
+		FROM Users_Board_likes
+		WHERE board_id = #{boardId} AND liked = true
+	</select>
 </mapper>

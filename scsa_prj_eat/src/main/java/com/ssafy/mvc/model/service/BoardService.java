@@ -25,4 +25,13 @@ public interface BoardService {
 	
 	// 맛집 검색
 	public List<Board> searchBoard(SearchCondition condition);
+	
+	// 좋아요 토글
+	void toggleLike(int boardId, String userId);
+	
+	// 좋아요 상태 확인
+	boolean checkLike(int boardId, String userId);
+	
+	// 좋아요 수 조회
+	int getLikeCount(int boardId);
 }

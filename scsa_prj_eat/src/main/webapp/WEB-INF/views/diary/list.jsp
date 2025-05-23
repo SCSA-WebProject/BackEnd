@@ -34,7 +34,7 @@
 
 		<div class="d-flex justify-content-end gap-2 mt-3">
 			<a class="btn btn-outline-primary" href="write">✏️ 새 일기 작성</a>
-			<a class="btn btn-outline-secondary" href="../list">맛집 목록으로</a>
+			<a class="btn btn-outline-secondary" href="/board/list">맛집 목록으로</a>
 		</div>
 	</div>
 </body>

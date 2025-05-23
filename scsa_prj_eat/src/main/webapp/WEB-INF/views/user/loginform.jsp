@@ -15,7 +15,7 @@
 				<%= request.getAttribute("error") %>
 			</div>
 		<% } %>
-		<form action="login" method="POST">
+		<form action="/login" method="POST">
 			<div class="mb-3">
 				<label for="id" class="form-label">ID</label>
 				<input type="text" class="form-control" id="id" name="id">

@@ -19,6 +19,13 @@
 					<div class="card-subtitle">지역: ${board.region}</div>
 					<div class="card-subtitle">카테고리: ${board.category}</div>
 					<div class="card-subtitle">가격대: ${board.price}원</div>
+					<div class="card-subtitle">
+						<button type="button" class="btn btn-sm ${board.liked ? 'btn-danger' : 'btn-outline-danger'}" 
+								onclick="toggleLike(${board.id})" id="likeBtn">
+							<i class="bi bi-heart${board.liked ? '-fill' : ''}" id="heartIcon"></i>
+							<span class="like-count" id="likeCount">${board.likeCount}</span>
+						</button>
+					</div>
 				</div>
 				<div class="card-subtitle mb-3">작성자: ${board.userId}</div>
 				<c:if test="${not empty board.boardFile}">
@@ -39,5 +46,44 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		function toggleLike(boardId) {
+			fetch('likeAjax', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: 'boardId=' + boardId
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					const likeBtn = document.getElementById('likeBtn');
+					const heartIcon = document.getElementById('heartIcon');
+					const likeCount = document.getElementById('likeCount');
+					
+					if (data.liked) {
+						likeBtn.classList.remove('btn-outline-danger');
+						likeBtn.classList.add('btn-danger');
+						heartIcon.classList.remove('bi-heart');
+						heartIcon.classList.add('bi-heart-fill');
+					} else {
+						likeBtn.classList.remove('btn-danger');
+						likeBtn.classList.add('btn-outline-danger');
+						heartIcon.classList.remove('bi-heart-fill');
+						heartIcon.classList.add('bi-heart');
+					}
+					
+					likeCount.textContent = data.likeCount;
+				} else {
+					alert(data.message);
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				alert('좋아요 처리 중 오류가 발생했습니다.');
+			});
+		}
+	</script>
 </body>
 </html>
