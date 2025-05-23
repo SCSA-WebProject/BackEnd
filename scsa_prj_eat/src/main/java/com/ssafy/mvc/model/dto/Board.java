@@ -6,6 +6,7 @@ public class Board {
 	private String region;
 	private String category;
 	private int price;
+	private String content;
 	private String userId;
 	private BoardFile boardFile;
 	private boolean liked;
@@ -85,6 +86,14 @@ public class Board {
 
 	public void setPrice(int price) {
 		this.price = price;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public boolean isLiked() {

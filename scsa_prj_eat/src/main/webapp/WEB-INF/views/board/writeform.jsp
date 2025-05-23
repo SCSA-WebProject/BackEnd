@@ -56,6 +56,10 @@
 				<input type="number" class="form-control" id="price" name="price" required>
 			</div>
 			<div class="mb-3">
+				<label for="content" class="form-label">한줄평(추천메뉴와 후기를 적어주세요)</label>
+				<textarea class="form-control" id="content" name="content" rows="5" required></textarea>
+			</div>
+			<div class="mb-3">
 				<label for="attach" class="form-label">이미지 첨부</label>
 				<input type="file" class="form-control" id="attach" name="attach" accept="image/*">
 			</div>

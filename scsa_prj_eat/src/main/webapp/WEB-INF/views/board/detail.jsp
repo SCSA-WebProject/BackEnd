@@ -28,6 +28,9 @@
 					</div>
 				</div>
 				<div class="card-subtitle mb-3">작성자: ${board.userId}</div>
+				<div class="card-text mb-3">
+					${board.content}
+				</div>
 				<c:if test="${not empty board.boardFile}">
 					<div class="mt-3">
 						<img src="/img${board.boardFile.filePath}/${board.boardFile.systemName}" 
