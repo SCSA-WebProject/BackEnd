@@ -43,11 +43,10 @@ public class UserController {
 		}
 		
 		// 로그인 제대로 됐을 때 실행되는 코드
-
 		session.setAttribute("loginUser", tmp.getName());
 		session.setAttribute("loginUserId", tmp.getId());
 
-		return "redirect:list";
+		return "redirect:/user/select";
 	}
 	
 	// 로그아웃
@@ -88,5 +87,10 @@ public class UserController {
 	    } else {
 	        return "available";
 	    }
+	}
+
+	@GetMapping("/user/select")
+	public String select() {
+		return "/user/select";
 	}
 }

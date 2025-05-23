@@ -46,29 +46,27 @@
 							</c:if>
 						</c:if>
 					</td>
-					<td><a href="detail?id=${board.id}">${board.title}</a></td>
+					<td><a href="/board/detail?id=${board.id}">${board.title}</a></td>
 					<td>${board.region}</td>
 					<td>${board.category}</td>
 					<td>${board.price}원</td>
 					<td>
-						<form action="like" method="post" style="display: inline;">
-							<input type="hidden" name="boardId" value="${board.id}">
-							<button type="submit" class="btn btn-sm ${board.liked ? 'btn-danger' : 'btn-outline-danger'}">
-								<i class="bi bi-heart${board.liked ? '-fill' : ''}"></i>
-								<span class="like-count">${board.likeCount}</span>
-							</button>
-						</form>
+						<button type="button" class="btn btn-sm ${board.liked ? 'btn-danger' : 'btn-outline-danger'}" 
+								onclick="toggleLike(${board.id}, this)" id="likeBtn${board.id}">
+							<i class="bi bi-heart${board.liked ? '-fill' : ''}" id="heartIcon${board.id}"></i>
+							<span class="like-count" id="likeCount${board.id}">${board.likeCount}</span>
+						</button>
 					</td>
 				</tr>
 			</c:forEach>
 		</table>
 		<div class="d-flex justify-content-end">
-			<a class="btn btn-outline-primary" href="/writeform">맛집 등록</a>
-			<a class="btn btn-outline-success" href="../diary/list">맛집 살펴보기</a>
+			<a class="btn btn-outline-primary" href="/board/writeform">맛집 등록</a>
+			<a class="btn btn-outline-success" href="/diary/list">맛집 살펴보기</a>
 		</div>
 		<c:if test="${pr.prev}">
-			<a href="list?page=1">[첫페이지]</a>
-			<a href="list?page=${pr.beginPage-1}">[이전]</a>
+			<a href="/board/list?page=1">[첫페이지]</a>
+			<a href="/board/list?page=${pr.beginPage-1}">[이전]</a>
 		</c:if>
 		<c:forEach var="i" begin="${pr.beginPage}" end="${pr.endPage}">
 			<c:choose>
@@ -76,18 +74,55 @@
 					<strong>[${i}]</strong>
 				</c:when>
 				<c:otherwise>
-					<a href="list?page=${i}">[${i}]</a>
+					<a href="/board/list?page=${i}">[${i}]</a>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>
 		<c:if test="${pr.next}">
-			<a href="list?page=${pr.endPage+1}">[다음]</a>
-			<a href="list?page=${pr.lastPage}">[마지막페이지]</a>
+			<a href="/board/list?page=${pr.endPage+1}">[다음]</a>
+			<a href="/board/list?page=${pr.lastPage}">[마지막페이지]</a>
 		</c:if>
 	</div>
 	<script>
 		function movePage(listSize) {
-			location.href = "list?listSize=" + listSize;
+			location.href = "/board/list?listSize=" + listSize;
+		}
+
+		function toggleLike(boardId, button) {
+			fetch('/board/likeAjax', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: 'boardId=' + boardId
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					const heartIcon = document.getElementById('heartIcon' + boardId);
+					const likeCount = document.getElementById('likeCount' + boardId);
+					
+					if (data.liked) {
+						button.classList.remove('btn-outline-danger');
+						button.classList.add('btn-danger');
+						heartIcon.classList.remove('bi-heart');
+						heartIcon.classList.add('bi-heart-fill');
+					} else {
+						button.classList.remove('btn-danger');
+						button.classList.add('btn-outline-danger');
+						heartIcon.classList.remove('bi-heart-fill');
+						heartIcon.classList.add('bi-heart');
+					}
+					
+					likeCount.textContent = data.likeCount;
+				} else {
+					alert(data.message);
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				alert('좋아요 처리 중 오류가 발생했습니다.');
+			});
 		}
 	</script>
 </body>

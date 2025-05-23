@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ssafy.mvc.model.dto.Board;
 import com.ssafy.mvc.model.dto.BoardFile;
@@ -27,6 +30,7 @@ import com.ssafy.mvc.model.service.BoardService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/board")
 public class BoardController {
 	private final BoardService boardService;
 	private ResourceLoader resourceLoader;
@@ -37,7 +41,7 @@ public class BoardController {
         this.resourceLoader = resourceLoader;
     }
 
-	@GetMapping("list")
+	@GetMapping("/list")
 	public String list(BoardSearch boardSearch, Model model, HttpSession session) {
 		Map<String, Object> result = boardService.getBoardList(boardSearch);
 		List<Board> boards = (List<Board>) result.get("list");
@@ -64,7 +68,7 @@ public class BoardController {
 		return "/board/writeform";
 	}
 
-	@PostMapping("write")
+	@PostMapping("/write")
 	public String write(@RequestParam("attach") MultipartFile attach, @ModelAttribute Board board, HttpSession session) throws IllegalStateException, IOException {
 		String userId = (String) session.getAttribute("loginUserId");
 		if (userId == null) {
@@ -100,7 +104,7 @@ public class BoardController {
 			board.setBoardFile(boardFile);
 		}
 		boardService.writeBoard(board);
-		return "redirect:list";
+		return "redirect:/board/list";
 	}
 
 	@GetMapping("/detail")
@@ -126,14 +130,14 @@ public class BoardController {
 		
 		Board board = boardService.readBoard(id);
 		if (board == null || !board.getUserId().equals(userId)) {
-			return "redirect:/list";
+			return "redirect:/board/list";
 		}
 		
 		boardService.removeBoard(id);
-		return "redirect:list";
+		return "redirect:/board/list";
 	}
 
-	@GetMapping("updateform")
+	@GetMapping("/updateform")
 	public String updateform(@RequestParam("id") int id, Model model, HttpSession session) {
 		String userId = (String) session.getAttribute("loginUserId");
 		if (userId == null) {
@@ -142,14 +146,14 @@ public class BoardController {
 		
 		Board board = boardService.readBoard(id);
 		if (board == null || !board.getUserId().equals(userId)) {
-			return "redirect:/list";
+			return "redirect:/board/list";
 		}
 		
 		model.addAttribute("board", board);
 		return "/board/updateform";
 	}
 
-	@PostMapping("update")
+	@PostMapping("/update")
 	public String update(@RequestParam(value = "attach", required = false) MultipartFile attach, @ModelAttribute Board board, HttpSession session) throws IllegalStateException, IOException {
 		String userId = (String) session.getAttribute("loginUserId");
 		if (userId == null) {
@@ -158,7 +162,7 @@ public class BoardController {
 		
 		Board existingBoard = boardService.readBoard(board.getId());
 		if (existingBoard == null || !existingBoard.getUserId().equals(userId)) {
-			return "redirect:/list";
+			return "redirect:/board/list";
 		}
 		
 		board.setUserId(userId);
@@ -185,7 +189,7 @@ public class BoardController {
 			board.setBoardFile(boardFile);
 		}
 		boardService.modifyBoard(board);
-		return "redirect:detail?id=" + board.getId();
+		return "redirect:/board/detail?id=" + board.getId();
 	}
 
 	@GetMapping("/search")
@@ -202,6 +206,28 @@ public class BoardController {
 		}
 		
 		boardService.toggleLike(boardId, userId);
-		return "redirect:/detail?id=" + boardId;
+		return "redirect:/board/list";
+	}
+
+	@PostMapping("/likeAjax")
+	@ResponseBody
+	public Map<String, Object> toggleLikeAjax(@RequestParam("boardId") int boardId, HttpSession session) {
+		Map<String, Object> result = new HashMap<>();
+		String userId = (String) session.getAttribute("loginUserId");
+		
+		if (userId == null) {
+			result.put("success", false);
+			result.put("message", "로그인이 필요합니다.");
+			return result;
+		}
+		
+		boardService.toggleLike(boardId, userId);
+		boolean liked = boardService.checkLike(boardId, userId);
+		int likeCount = boardService.getLikeCount(boardId);
+		
+		result.put("success", true);
+		result.put("liked", liked);
+		result.put("likeCount", likeCount);
+		return result;
 	}
 }
