@@ -33,4 +33,13 @@ public interface BoardDao {
 	
 	BoardFile selectBoardFileByNo(int id);
 
+	// 좋아요 추가/삭제
+	void toggleLike(int boardId, String userId);
+	
+	// 좋아요 상태 확인
+	boolean checkLike(int boardId, String userId);
+	
+	// 좋아요 수 조회
+	int getLikeCount(int boardId);
+
 }

@@ -77,4 +77,24 @@ public class BoardServiceImpl implements BoardService {
 	public List<Board> searchBoard(SearchCondition condition) {
 		return boardDao.selectByWhere(condition);
 	}
+
+	@Override
+	@Transactional
+	public void toggleLike(int boardId, String userId) {
+		boardDao.toggleLike(boardId, userId);
+	}
+
+	@Override
+	public boolean checkLike(int boardId, String userId) {
+		try {
+			return boardDao.checkLike(boardId, userId);
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public int getLikeCount(int boardId) {
+		return boardDao.getLikeCount(boardId);
+	}
 }

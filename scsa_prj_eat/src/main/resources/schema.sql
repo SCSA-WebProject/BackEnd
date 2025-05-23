@@ -51,6 +51,16 @@ CREATE TABLE diary (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- 좋아요 정보를 저장하는 Users_Board_likes 테이블
+CREATE TABLE Users_Board_likes (
+    board_id INT,
+    user_id VARCHAR(50),
+    liked BOOLEAN DEFAULT true,
+    PRIMARY KEY (board_id, user_id),
+    FOREIGN KEY (board_id) REFERENCES board(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 -- 초기 데이터 삽입
 -- company 테이블 데이터
 INSERT INTO company (code, name) VALUES 

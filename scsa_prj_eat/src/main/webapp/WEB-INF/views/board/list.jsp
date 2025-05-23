@@ -28,6 +28,7 @@
 				<th>지역</th>
 				<th>카테고리</th>
 				<th>가격대</th>
+				<th>좋아요</th>
 			</tr>
 			<c:forEach items="${boards}" var="board">
 				<tr>
@@ -49,6 +50,15 @@
 					<td>${board.region}</td>
 					<td>${board.category}</td>
 					<td>${board.price}원</td>
+					<td>
+						<form action="like" method="post" style="display: inline;">
+							<input type="hidden" name="boardId" value="${board.id}">
+							<button type="submit" class="btn btn-sm ${board.liked ? 'btn-danger' : 'btn-outline-danger'}">
+								<i class="bi bi-heart${board.liked ? '-fill' : ''}"></i>
+								<span class="like-count">${board.likeCount}</span>
+							</button>
+						</form>
+					</td>
 				</tr>
 			</c:forEach>
 		</table>

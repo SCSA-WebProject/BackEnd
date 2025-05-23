@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -37,9 +38,19 @@ public class BoardController {
     }
 
 	@GetMapping("list")
-	public String list(BoardSearch boardSearch, Model model) {
+	public String list(BoardSearch boardSearch, Model model, HttpSession session) {
 		Map<String, Object> result = boardService.getBoardList(boardSearch);
-		model.addAttribute("boards", result.get("list"));
+		List<Board> boards = (List<Board>) result.get("list");
+		String userId = (String) session.getAttribute("loginUserId");
+		
+		if (userId != null) {
+			for (Board board : boards) {
+				board.setLiked(boardService.checkLike(board.getId(), userId));
+				board.setLikeCount(boardService.getLikeCount(board.getId()));
+			}
+		}
+		
+		model.addAttribute("boards", boards);
 		model.addAttribute("pr", result.get("pr"));
 		return "/board/list";
 	}
@@ -93,8 +104,15 @@ public class BoardController {
 	}
 
 	@GetMapping("/detail")
-	public String detail(@RequestParam("id") int id, Model model) {
+	public String detail(@RequestParam("id") int id, Model model, HttpSession session) {
 		Board board = boardService.readBoard(id);
+		String userId = (String) session.getAttribute("loginUserId");
+		
+		if (userId != null) {
+			board.setLiked(boardService.checkLike(id, userId));
+		}
+		board.setLikeCount(boardService.getLikeCount(id));
+		
 		model.addAttribute("board", board);
 		return "/board/detail";
 	}
@@ -174,5 +192,16 @@ public class BoardController {
 	public String search(@ModelAttribute SearchCondition condition, Model model) {
 		model.addAttribute("boards", boardService.searchBoard(condition));
 		return "/board/list";
+	}
+
+	@PostMapping("/like")
+	public String toggleLike(@RequestParam("boardId") int boardId, HttpSession session) {
+		String userId = (String) session.getAttribute("loginUserId");
+		if (userId == null) {
+			return "redirect:/login";
+		}
+		
+		boardService.toggleLike(boardId, userId);
+		return "redirect:/detail?id=" + boardId;
 	}
 }
