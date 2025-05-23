@@ -46,13 +46,6 @@ public class UserController {
 
 		session.setAttribute("loginUser", tmp.getName());
 		session.setAttribute("loginUserId", tmp.getId());
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 		return "redirect:list";
 	}
 	
