@@ -47,6 +47,7 @@ public class UserController {
 		session.setAttribute("loginUserId", tmp.getId());
 
 		return "redirect:/user/select";
+
 	}
 	
 	// 로그아웃

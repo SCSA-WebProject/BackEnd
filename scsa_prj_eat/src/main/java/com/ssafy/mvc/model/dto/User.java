@@ -4,6 +4,7 @@ public class User {
 	private String id;
 	private String password;
 	private String name;
+	private int classNum;
 	private String phone;
 	private int companyCode;
 	private String companyName;
@@ -54,6 +55,14 @@ public class User {
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+
+	public int getClassNum() {
+		return classNum;
+	}
+
+	public void setClassNum(int classNum) {
+		this.classNum = classNum;
 	}
 
 }
