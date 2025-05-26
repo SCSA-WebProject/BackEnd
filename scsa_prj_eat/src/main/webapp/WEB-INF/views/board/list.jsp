@@ -52,7 +52,7 @@
 					<td>${board.price}원</td>
 					<td>
 						<button type="button" class="btn btn-sm ${board.liked ? 'btn-danger' : 'btn-outline-danger'}" 
-								onclick="toggleLike(${board.id}, this)" id="likeBtn${board.id}">
+								onclick="toggleLike('${board.id}', this)" id="likeBtn${board.id}">
 							<i class="bi bi-heart${board.liked ? '-fill' : ''}" id="heartIcon${board.id}"></i>
 							<span class="like-count" id="likeCount${board.id}">${board.likeCount}</span>
 						</button>

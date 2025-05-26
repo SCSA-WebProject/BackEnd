@@ -66,27 +66,40 @@
 
 	<!-- 검색기능 -->
 	<select id="selectByWhere" resultMap="boardMap" parameterType="SearchCondition">
-		SELECT id, title, region, category, price, content, user_id
-		FROM BOARD
+		SELECT b.*, bf.*, 
+		       (SELECT COUNT(*) FROM Users_Board_likes WHERE board_id = b.id AND liked = true) as like_count
+		FROM BOARD b
+		LEFT JOIN board_file bf ON b.id = bf.id
 		<where>
 			<choose>
 				<when test="key == 'titleNregion'">
-					(title LIKE CONCAT('%', #{word}, '%') OR region LIKE CONCAT('%', #{word}, '%'))
+					(b.title LIKE CONCAT('%', #{word}, '%') OR b.region LIKE CONCAT('%', #{word}, '%'))
 				</when>
 				<when test="key == 'category'">
-					category = #{word}
+					b.category = #{word}
 				</when>
 				<when test="key == 'price'">
-					price &lt;= #{word}
+					b.price &lt;= #{word}
 				</when>
 				<otherwise>
-					${key} LIKE CONCAT('%', #{word}, '%')
+					b.${key} LIKE CONCAT('%', #{word}, '%')
 				</otherwise>
 			</choose>
 		</where>
-		<if test="orderBy != 'none'">
-			ORDER BY ${orderBy} ${orderByDir}
-		</if>
+		<choose>
+			<when test="orderBy == 'like_count'">
+				ORDER BY like_count DESC, b.id DESC
+			</when>
+			<when test="orderBy == 'price_desc'">
+				ORDER BY b.price DESC, b.id DESC
+			</when>
+			<when test="orderBy == 'price_asc'">
+				ORDER BY b.price ASC, b.id DESC
+			</when>
+			<otherwise>
+				ORDER BY b.id DESC
+			</otherwise>
+		</choose>
 	</select>
 
 	<select id="selectBoardFileByNo" resultType="BoardFile" parameterType="int">
