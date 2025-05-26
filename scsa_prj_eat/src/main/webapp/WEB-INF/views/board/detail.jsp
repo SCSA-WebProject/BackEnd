@@ -40,7 +40,7 @@
 					</div>
 				</c:if>
 				<div>
-					<c:if test="${sessionScope.loginUser eq board.userId}">
+					<c:if test="${sessionScope.loginUserId eq board.userId}">
 						<a href="delete?id=${board.id}" class="btn btn-info">삭제</a>
 						<a href="updateform?id=${board.id}" class="btn btn-success">수정</a>
 					</c:if>
