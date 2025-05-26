@@ -97,4 +97,14 @@ public class BoardServiceImpl implements BoardService {
 	public int getLikeCount(int boardId) {
 		return boardDao.getLikeCount(boardId);
 	}
+
+	@Override
+	public List<Board> getRecentBoards(int limit) {
+		return boardDao.selectRecentBoards(limit);
+	}
+
+	@Override
+	public List<Board> getPopularBoards(int limit) {
+		return boardDao.selectPopularBoards(limit);
+	}
 }

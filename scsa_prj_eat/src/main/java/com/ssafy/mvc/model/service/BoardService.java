@@ -34,4 +34,10 @@ public interface BoardService {
 	
 	// 좋아요 수 조회
 	int getLikeCount(int boardId);
+	
+	// 최근 등록된 맛집 목록
+	List<Board> getRecentBoards(int limit);
+	
+	// 좋아요가 많은 맛집 목록
+	List<Board> getPopularBoards(int limit);
 }

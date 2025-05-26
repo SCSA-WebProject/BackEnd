@@ -115,4 +115,22 @@
 		FROM Users_Board_likes
 		WHERE board_id = #{boardId} AND liked = true
 	</select>
+
+	<!-- 최근 등록된 맛집 목록 -->
+	<select id="selectRecentBoards" parameterType="int" resultMap="boardMap">
+		SELECT b.*, 
+		       (SELECT COUNT(*) FROM Users_Board_likes WHERE board_id = b.id AND liked = true) as like_count
+		FROM BOARD b
+		ORDER BY b.id DESC
+		LIMIT #{limit}
+	</select>
+	
+	<!-- 좋아요가 많은 맛집 목록 -->
+	<select id="selectPopularBoards" parameterType="int" resultMap="boardMap">
+		SELECT b.*, 
+		       (SELECT COUNT(*) FROM Users_Board_likes WHERE board_id = b.id AND liked = true) as like_count
+		FROM BOARD b
+		ORDER BY like_count DESC, b.id DESC
+		LIMIT #{limit}
+	</select>
 </mapper>
