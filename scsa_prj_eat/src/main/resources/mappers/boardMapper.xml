@@ -13,6 +13,13 @@
 		<result column="price" property="price"/>
 		<result column="content" property="content"/>
 		<result column="user_id" property="userId"/>
+		<result column="like_count" property="likeCount"/>
+		<association property="boardFile" javaType="BoardFile">
+			<id column="file_id" property="id"/>
+			<result column="file_path" property="filePath"/>
+			<result column="ori_name" property="oriName"/>
+			<result column="system_name" property="systemName"/>
+		</association>
 	</resultMap>
 	<!-- 전체 맛집 목록 조회 -->
 	<select id="selectAll" resultMap="boardMap">
@@ -118,18 +125,20 @@
 
 	<!-- 최근 등록된 맛집 목록 -->
 	<select id="selectRecentBoards" parameterType="int" resultMap="boardMap">
-		SELECT b.*, 
+		SELECT b.*, bf.*, 
 		       (SELECT COUNT(*) FROM Users_Board_likes WHERE board_id = b.id AND liked = true) as like_count
 		FROM BOARD b
+		LEFT JOIN board_file bf ON b.id = bf.id
 		ORDER BY b.id DESC
 		LIMIT #{limit}
 	</select>
 	
 	<!-- 좋아요가 많은 맛집 목록 -->
 	<select id="selectPopularBoards" parameterType="int" resultMap="boardMap">
-		SELECT b.*, 
+		SELECT b.*, bf.*, 
 		       (SELECT COUNT(*) FROM Users_Board_likes WHERE board_id = b.id AND liked = true) as like_count
 		FROM BOARD b
+		LEFT JOIN board_file bf ON b.id = bf.id
 		ORDER BY like_count DESC, b.id DESC
 		LIMIT #{limit}
 	</select>

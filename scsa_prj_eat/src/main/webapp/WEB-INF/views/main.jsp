@@ -9,11 +9,23 @@
 <style>
     .restaurant-card {
         height: 100%;
+        transition: transform 0.2s;
+    }
+    .restaurant-card:hover {
+        transform: translateY(-5px);
     }
     .restaurant-image {
         width: 100%;
         height: 200px;
         object-fit: cover;
+    }
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    .card-text {
+        font-size: 0.9rem;
     }
 </style>
 </head>
@@ -22,6 +34,11 @@
         <h2 class="text-center my-4">슥슐랭가이드</h2>
         <%@ include file="common/header.jsp"%>
         <hr>
+        
+        <div class="d-flex justify-content-end mb-4">
+            <a href="/board/writeform" class="btn btn-primary me-2">맛집 등록하기</a>
+            <a href="/board/list" class="btn btn-success">맛집 살펴보기</a>
+        </div>
         
         <!-- 최근 등록된 맛집 -->
         <div class="row mb-5">
@@ -36,12 +53,22 @@
                                         class="card-img-top restaurant-image" 
                                         alt="${board.boardFile.oriName}"
                                         onerror="this.onerror=null; this.src='/img/default.jpg';">
+                                    <!-- 디버깅용 정보 -->
+                                    <c:if test="${empty board.boardFile.filePath}">
+                                        <small class="text-danger">이미지 경로 없음</small>
+                                    </c:if>
+                                </c:if>
+                                <c:if test="${empty board.boardFile}">
+                                    <img src="/img/default.jpg" 
+                                        class="card-img-top restaurant-image" 
+                                        alt="기본 이미지">
                                 </c:if>
                                 <div class="card-body">
                                     <h5 class="card-title">${board.title}</h5>
                                     <p class="card-text">
                                         <small class="text-muted">${board.region} | ${board.category}</small><br>
-                                        <small class="text-muted">${board.price}원</small>
+                                        <small class="text-muted">${board.price}원</small><br>
+                                        <small class="text-danger"><i class="bi bi-heart-fill"></i> ${board.likeCount}</small>
                                     </p>
                                     <a href="/board/detail?id=${board.id}" class="btn btn-primary btn-sm">자세히 보기</a>
                                 </div>
@@ -65,6 +92,15 @@
                                         class="card-img-top restaurant-image" 
                                         alt="${board.boardFile.oriName}"
                                         onerror="this.onerror=null; this.src='/img/default.jpg';">
+                                    <!-- 디버깅용 정보 -->
+                                    <c:if test="${empty board.boardFile.filePath}">
+                                        <small class="text-danger">이미지 경로 없음</small>
+                                    </c:if>
+                                </c:if>
+                                <c:if test="${empty board.boardFile}">
+                                    <img src="/img/default.jpg" 
+                                        class="card-img-top restaurant-image" 
+                                        alt="기본 이미지">
                                 </c:if>
                                 <div class="card-body">
                                     <h5 class="card-title">${board.title}</h5>
