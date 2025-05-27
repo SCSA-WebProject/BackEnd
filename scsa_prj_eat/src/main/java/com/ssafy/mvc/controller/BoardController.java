@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -31,6 +32,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/board")
+@CrossOrigin(origins = "http://localhost:5173")
 public class BoardController {
 	private final BoardService boardService;
 	private ResourceLoader resourceLoader;

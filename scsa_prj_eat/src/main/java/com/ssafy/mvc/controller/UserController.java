@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.ssafy.mvc.model.dto.User;
 import com.ssafy.mvc.model.service.UserServiceImpl;
@@ -14,6 +15,7 @@ import com.ssafy.mvc.model.service.UserServiceImpl;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 	private final UserServiceImpl userService;
 
