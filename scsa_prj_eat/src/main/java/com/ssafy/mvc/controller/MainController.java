@@ -27,15 +27,18 @@
 
 package com.ssafy.mvc.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ssafy.mvc.model.service.BoardService;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:5173")
 public class MainController {
     private final BoardService boardService;
 

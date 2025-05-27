@@ -1,9 +1,12 @@
 package com.ssafy.mvc.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,10 +16,9 @@ import com.ssafy.mvc.model.dto.User;
 import com.ssafy.mvc.model.service.UserServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 	private final UserServiceImpl userService;
 
@@ -27,12 +29,12 @@ public class UserController {
 	
 	@GetMapping("/")
 	public String home() {
-	    return "redirect:http://localhost:5373";
+	    return "redirect:http://localhost:5173";
 	}
 
 	@GetMapping("/login")
 	public String loginForm() {
-		return "redirect:http://localhost:5373";
+		return "redirect:http://localhost:5173";
 	}
 
 	@PostMapping("/login")
@@ -82,7 +84,7 @@ public class UserController {
 	// 회원가입 -> 실습시간에 만들어보기
 	@GetMapping("/signup")
 	public String signupform() {
-		return "redirect:http://localhost:5373/signup";
+		return "redirect:http://localhost:5173/signup";
 	}
 	
 	@PostMapping("signup")
