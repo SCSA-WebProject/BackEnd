@@ -16,7 +16,7 @@ CREATE TABLE users (
     id VARCHAR(50) PRIMARY KEY,
     password VARCHAR(100) NOT NULL,
     name VARCHAR(50) NOT NULL,
-    class int NOT NULL,
+    class int ,
     phone VARCHAR(20),
     company_code INT,
     FOREIGN KEY (company_code) REFERENCES company(code)

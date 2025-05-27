@@ -87,7 +87,7 @@ public class UserController {
 		return "redirect:http://localhost:5173/signup";
 	}
 	
-	@PostMapping("signup")
+	@PostMapping("/signup")
 	@ResponseBody
 	public Map<String, Object> signup(@RequestBody User user) {
 		Map<String, Object> response = new HashMap<>();
