@@ -7,6 +7,7 @@ public class Board {
 	private String category;
 	private int price;
 	private String content;
+	private String address;
 	private String userId;
 	private BoardFile boardFile;
 	private boolean liked;
@@ -94,6 +95,14 @@ public class Board {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public boolean isLiked() {

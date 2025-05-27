@@ -12,6 +12,7 @@
 		<result column="category" property="category"/>
 		<result column="price" property="price"/>
 		<result column="content" property="content"/>
+		<result column="address" property="address"/>
 		<result column="user_id" property="userId"/>
 		<result column="like_count" property="likeCount"/>
 		<association property="boardFile" javaType="BoardFile">
@@ -23,7 +24,7 @@
 	</resultMap>
 	<!-- 전체 맛집 목록 조회 -->
 	<select id="selectAll" resultMap="boardMap">
-		SELECT id, title, region, category, price, content, user_id
+		SELECT id, title, region, category, price, content, address, user_id
 		FROM BOARD
 		ORDER BY ID DESC
 		LIMIT #{offset}, #{listSize}
@@ -36,15 +37,15 @@
 
 	<!-- 상세 맛집 조회 -->
 	<select id="selectOne" resultMap="boardMap" parameterType="int">
-		SELECT id, title, region, category, price, content, user_id
+		SELECT id, title, region, category, price, content, address, user_id
 		FROM BOARD
 		WHERE id = #{id}
 	</select>
 
 	<!-- 맛집 등록 -->
 	<insert id="insertBoard" parameterType="Board" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO BOARD (title, region, category, price, content, user_id)
-		VALUES (#{title}, #{region}, #{category}, #{price}, #{content}, #{userId})
+		INSERT INTO BOARD (title, region, category, price, content, address, user_id)
+		VALUES (#{title}, #{region}, #{category}, #{price}, #{content}, #{address}, #{userId})
 	</insert>
 
 	<!-- 맛집 삭제 -->
@@ -60,7 +61,8 @@
 			region = #{region},
 			category = #{category},
 			price = #{price},
-			content = #{content}
+			content = #{content},
+			address = #{address}
 		WHERE id = #{id} AND user_id = #{userId}
 	</update>
 

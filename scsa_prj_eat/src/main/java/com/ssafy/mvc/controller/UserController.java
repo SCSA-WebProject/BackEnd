@@ -90,8 +90,4 @@ public class UserController {
 	    }
 	}
 
-	@GetMapping("/user/select")
-	public String select() {
-		return "/user/select";
-	}
 }

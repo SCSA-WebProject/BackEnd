@@ -30,6 +30,7 @@ CREATE TABLE board (
     category VARCHAR(200),
     price INT,
     content TEXT,
+    address VARCHAR(500),
     user_id VARCHAR(50),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
