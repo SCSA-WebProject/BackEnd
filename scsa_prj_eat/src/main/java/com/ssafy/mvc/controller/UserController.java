@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -12,6 +13,8 @@ import com.ssafy.mvc.model.dto.User;
 import com.ssafy.mvc.model.service.UserServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -24,39 +27,49 @@ public class UserController {
 	
 	@GetMapping("/")
 	public String home() {
-	    return "redirect:/login";
+	    return "redirect:http://localhost:5373";
 	}
 
 	@GetMapping("/login")
 	public String loginForm() {
-		return "/user/loginform";
+		return "redirect:http://localhost:5373";
 	}
 
 	@PostMapping("/login")
-	public String login(@ModelAttribute User user, HttpSession session, Model model) {
+	@ResponseBody
+	public Map<String, Object> login(@RequestBody User user, HttpSession session) {
+		Map<String, Object> response = new HashMap<>();
 		User tmp = userService.login(user.getId(), user.getPassword());
-		// tmp : 정상로그인 -> User 정보
-		// 		비정상로그인 -> null
-		if(tmp==null) {
-			model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다.");
-			return "/user/loginform"; // 로그인 화면으로 보내기
+		
+		if(tmp == null) {
+			response.put("error", "아이디 또는 비밀번호가 일치하지 않습니다.");
+			return response;
 		}
 		
-		// 로그인 제대로 됐을 때 실행되는 코드
+		// 세션에 사용자 정보 저장
 		session.setAttribute("loginUser", tmp.getName());
 		session.setAttribute("loginUserId", tmp.getId());
-
-		return "redirect:/main";
-
+		
+		// 응답에 사용자 정보 추가 (비밀번호 제외)
+		Map<String, Object> userInfo = new HashMap<>();
+		userInfo.put("id", tmp.getId());
+		userInfo.put("name", tmp.getName());
+		userInfo.put("classNum", tmp.getClassNum());
+		userInfo.put("phone", tmp.getPhone());
+		userInfo.put("companyCode", tmp.getCompanyCode());
+		userInfo.put("companyName", tmp.getCompanyName());
+		
+		response.put("user", userInfo);
+		return response;
 	}
 	
-	// 로그아웃
 	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-	    // 세션 무효화
-	    session.invalidate();
-	    // 로그인 페이지로 리다이렉트
-	    return "redirect:login";
+	@ResponseBody
+	public Map<String, Object> logout(HttpSession session) {
+		Map<String, Object> response = new HashMap<>();
+		session.invalidate();
+		response.put("message", "로그아웃되었습니다.");
+		return response;
 	}
 	
 	@GetMapping("/users")
@@ -69,13 +82,20 @@ public class UserController {
 	// 회원가입 -> 실습시간에 만들어보기
 	@GetMapping("/signup")
 	public String signupform() {
-		return "/user/signupform";
+		return "redirect:http://localhost:5373/signup";
 	}
 	
 	@PostMapping("signup")
-	public String signup(@ModelAttribute User user) {
-		userService.signup(user);
-		return "redirect:login";
+	@ResponseBody
+	public Map<String, Object> signup(@RequestBody User user) {
+		Map<String, Object> response = new HashMap<>();
+		try {
+			userService.signup(user);
+			response.put("message", "회원가입이 완료되었습니다.");
+		} catch (Exception e) {
+			response.put("error", "회원가입 중 오류가 발생했습니다.");
+		}
+		return response;
 	}
 
 

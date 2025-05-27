@@ -1,10 +1,39 @@
+//package com.ssafy.mvc.controller;
+//
+//import org.springframework.stereotype.Controller;
+//import org.springframework.ui.Model;
+//import org.springframework.web.bind.annotation.GetMapping;
+//
+//import com.ssafy.mvc.model.service.BoardService;
+//
+//@Controller
+//public class MainController {
+//    private final BoardService boardService;
+//
+//    public MainController(BoardService boardService) {
+//        this.boardService = boardService;
+//    }
+//
+//    @GetMapping("/main")
+//    public String main(Model model) {
+//        // 최근 등록된 맛집 5개
+//        model.addAttribute("recentBoards", boardService.getRecentBoards(5));
+//        // 좋아요가 많은 맛집 5개
+//        model.addAttribute("popularBoards", boardService.getPopularBoards(5));
+//        return "main";
+//    }
+//} 
+
+
 package com.ssafy.mvc.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ssafy.mvc.model.service.BoardService;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class MainController {
@@ -15,11 +44,13 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(Model model) {
+    @ResponseBody
+    public Map<String, Object> main() {
+        Map<String, Object> response = new HashMap<>();
         // 최근 등록된 맛집 5개
-        model.addAttribute("recentBoards", boardService.getRecentBoards(5));
+        response.put("recentBoards", boardService.getRecentBoards(5));
         // 좋아요가 많은 맛집 5개
-        model.addAttribute("popularBoards", boardService.getPopularBoards(5));
-        return "main";
+        response.put("popularBoards", boardService.getPopularBoards(5));
+        return response;
     }
 } 
