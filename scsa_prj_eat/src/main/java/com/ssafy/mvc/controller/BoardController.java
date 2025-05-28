@@ -36,12 +36,12 @@ import jakarta.servlet.http.HttpSession;
 public class BoardController {
 	private final BoardService boardService;
 	private ResourceLoader resourceLoader;
-	
-    @Autowired
-    public BoardController(BoardService boardService, ResourceLoader resourceLoader) {
-        this.boardService = boardService;
-        this.resourceLoader = resourceLoader;
-    }
+
+	@Autowired
+	public BoardController(BoardService boardService, ResourceLoader resourceLoader) {
+		this.boardService = boardService;
+		this.resourceLoader = resourceLoader;
+	}
 
 	@GetMapping("/list")
 	@ResponseBody
@@ -49,14 +49,14 @@ public class BoardController {
 		Map<String, Object> result = boardService.getBoardList(boardSearch);
 		List<Board> boards = (List<Board>) result.get("list");
 		String userId = (String) session.getAttribute("loginUserId");
-		
+
 		if (userId != null) {
 			for (Board board : boards) {
 				board.setLiked(boardService.checkLike(board.getId(), userId));
 				board.setLikeCount(boardService.getLikeCount(board.getId()));
 			}
 		}
-		
+
 		Map<String, Object> response = new HashMap<>();
 		response.put("success", true);
 		response.put("boards", boards);
@@ -75,20 +75,19 @@ public class BoardController {
 
 	@PostMapping("/write")
 	@ResponseBody
-	public Map<String, Object> write(@RequestParam(value = "attach", required = false) MultipartFile attach, 
-								   @ModelAttribute Board board, 
-								   HttpSession session) throws IllegalStateException, IOException {
+	public Map<String, Object> write(@RequestParam(value = "attach", required = false) MultipartFile attach,
+			@ModelAttribute Board board, HttpSession session) throws IllegalStateException, IOException {
 		Map<String, Object> response = new HashMap<>();
 		String userId = (String) session.getAttribute("loginUserId");
-		
+
 		if (userId == null) {
 			response.put("success", false);
 			response.put("error", "로그인이 필요합니다.");
 			return response;
 		}
-		
+
 		board.setUserId(userId);
-		
+
 		if (attach != null && !attach.isEmpty()) {
 			String oriName = attach.getOriginalFilename();
 			String subDir = new SimpleDateFormat("/yyyy/MM/dd/HH").format(new Date());
@@ -97,23 +96,23 @@ public class BoardController {
 			if (!uploadDir.exists()) {
 				uploadDir.mkdirs();
 			}
-			
+
 			File subDirFile = new File(uploadPath + subDir);
 			if (!subDirFile.exists()) {
 				subDirFile.mkdirs();
 			}
-			
+
 			String systemName = UUID.randomUUID().toString() + "_" + oriName;
 			File dest = new File(subDirFile, systemName);
 			attach.transferTo(dest);
-			
+
 			BoardFile boardFile = new BoardFile();
 			boardFile.setFilePath(subDir);
 			boardFile.setOriName(oriName);
 			boardFile.setSystemName(systemName);
 			board.setBoardFile(boardFile);
 		}
-		
+
 		try {
 			boardService.writeBoard(board);
 			response.put("success", true);
@@ -123,7 +122,7 @@ public class BoardController {
 			response.put("success", false);
 			response.put("error", "게시글 등록에 실패했습니다.");
 		}
-		
+
 		return response;
 	}
 
@@ -133,12 +132,12 @@ public class BoardController {
 		Map<String, Object> response = new HashMap<>();
 		Board board = boardService.readBoard(id);
 		String userId = (String) session.getAttribute("loginUserId");
-		
+
 		if (userId != null) {
 			board.setLiked(boardService.checkLike(id, userId));
 		}
 		board.setLikeCount(boardService.getLikeCount(id));
-		
+
 		response.put("success", true);
 		response.put("board", board);
 		return response;
@@ -149,20 +148,20 @@ public class BoardController {
 	public Map<String, Object> delete(@RequestParam("id") int id, HttpSession session) {
 		Map<String, Object> response = new HashMap<>();
 		String userId = (String) session.getAttribute("loginUserId");
-		
+
 		if (userId == null) {
 			response.put("success", false);
 			response.put("error", "로그인이 필요합니다.");
 			return response;
 		}
-		
+
 		Board board = boardService.readBoard(id);
 		if (board == null || !board.getUserId().equals(userId)) {
 			response.put("success", false);
 			response.put("error", "삭제 권한이 없습니다.");
 			return response;
 		}
-		
+
 		try {
 			boardService.removeBoard(id);
 			response.put("success", true);
@@ -171,7 +170,7 @@ public class BoardController {
 			response.put("success", false);
 			response.put("error", "게시글 삭제에 실패했습니다.");
 		}
-		
+
 		return response;
 	}
 
@@ -181,49 +180,48 @@ public class BoardController {
 		if (userId == null) {
 			return "redirect:/login";
 		}
-		
+
 		Board board = boardService.readBoard(id);
 		if (board == null || !board.getUserId().equals(userId)) {
 			return "redirect:/board/list";
 		}
-		
+
 		model.addAttribute("board", board);
 		return "/board/updateform";
 	}
 
 	@PostMapping("/update")
 	@ResponseBody
-	public Map<String, Object> update(@RequestParam(value = "attach", required = false) MultipartFile attach, 
-									@ModelAttribute Board board, 
-									HttpSession session) throws IllegalStateException, IOException {
+	public Map<String, Object> update(@RequestParam(value = "attach", required = false) MultipartFile attach,
+			@ModelAttribute Board board, HttpSession session) throws IllegalStateException, IOException {
 		Map<String, Object> response = new HashMap<>();
 		String userId = (String) session.getAttribute("loginUserId");
-		
+
 		if (userId == null) {
 			response.put("success", false);
 			response.put("error", "로그인이 필요합니다.");
 			return response;
 		}
-		
+
 		Board existingBoard = boardService.readBoard(board.getId());
 		if (existingBoard == null || !existingBoard.getUserId().equals(userId)) {
 			response.put("success", false);
 			response.put("error", "수정 권한이 없습니다.");
 			return response;
 		}
-		
+
 		board.setUserId(userId);
-		
+
 		if (attach != null && !attach.isEmpty()) {
 			String oriName = attach.getOriginalFilename();
 			String subDir = new SimpleDateFormat("/yyyy/MM/dd/HH").format(new Date());
 			String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/img";
-			
+
 			File subDirFile = new File(uploadPath + subDir);
 			if (!subDirFile.exists()) {
 				subDirFile.mkdirs();
 			}
-			
+
 			String systemName = UUID.randomUUID().toString() + "_" + oriName;
 			File dest = new File(subDirFile, systemName);
 			attach.transferTo(dest);
@@ -235,7 +233,7 @@ public class BoardController {
 			boardFile.setId(board.getId());
 			board.setBoardFile(boardFile);
 		}
-		
+
 		try {
 			boardService.modifyBoard(board);
 			response.put("success", true);
@@ -244,7 +242,7 @@ public class BoardController {
 			response.put("success", false);
 			response.put("error", "게시글 수정에 실패했습니다.");
 		}
-		
+
 		return response;
 	}
 
@@ -268,18 +266,18 @@ public class BoardController {
 	public Map<String, Object> toggleLike(@RequestParam("boardId") int boardId, HttpSession session) {
 		Map<String, Object> response = new HashMap<>();
 		String userId = (String) session.getAttribute("loginUserId");
-		
+
 		if (userId == null) {
 			response.put("success", false);
 			response.put("error", "로그인이 필요합니다.");
 			return response;
 		}
-		
+
 		try {
 			boardService.toggleLike(boardId, userId);
 			boolean liked = boardService.checkLike(boardId, userId);
 			int likeCount = boardService.getLikeCount(boardId);
-			
+
 			response.put("success", true);
 			response.put("liked", liked);
 			response.put("likeCount", likeCount);
@@ -287,12 +285,10 @@ public class BoardController {
 			response.put("success", false);
 			response.put("error", "좋아요 처리에 실패했습니다.");
 		}
-		
+
 		return response;
 	}
 }
-
-
 
 // package com.ssafy.mvc.controller;
 
@@ -331,7 +327,7 @@ public class BoardController {
 // public class BoardController {
 //  private final BoardService boardService;
 //  private ResourceLoader resourceLoader;
-  
+
 //     @Autowired
 //     public BoardController(BoardService boardService, ResourceLoader resourceLoader) {
 //         this.boardService = boardService;
@@ -344,14 +340,14 @@ public class BoardController {
 //    Map<String, Object> result = boardService.getBoardList(boardSearch);
 //    List<Board> boards = (List<Board>) result.get("list");
 //    String userId = (String) session.getAttribute("loginUserId");
-    
+
 //    if (userId != null) {
 //      for (Board board : boards) {
 //        board.setLiked(boardService.checkLike(board.getId(), userId));
 //        board.setLikeCount(boardService.getLikeCount(board.getId()));
 //      }
 //    }
-    
+
 //    return result;
 //  }
 
@@ -371,14 +367,14 @@ public class BoardController {
 //                   HttpSession session) throws IllegalStateException, IOException {
 //    Map<String, Object> response = new HashMap<>();
 //    String userId = (String) session.getAttribute("loginUserId");
-    
+
 //    if (userId == null) {
 //      response.put("error", "로그인이 필요합니다.");
 //      return response;
 //    }
-    
+
 //    board.setUserId(userId);
-    
+
 //    if (attach != null && !attach.isEmpty()) {
 //      String oriName = attach.getOriginalFilename();
 //      String subDir = new SimpleDateFormat("/yyyy/MM/dd/HH").format(new Date());
@@ -387,23 +383,23 @@ public class BoardController {
 //      if (!uploadDir.exists()) {
 //        uploadDir.mkdirs();
 //      }
-      
+
 //      File subDirFile = new File(uploadPath + subDir);
 //      if (!subDirFile.exists()) {
 //        subDirFile.mkdirs();
 //      }
-      
+
 //      String systemName = UUID.randomUUID().toString() + "_" + oriName;
 //      File dest = new File(subDirFile, systemName);
 //      attach.transferTo(dest);
-      
+
 //      BoardFile boardFile = new BoardFile();
 //      boardFile.setFilePath(subDir);
 //      boardFile.setOriName(oriName);
 //      boardFile.setSystemName(systemName);
 //      board.setBoardFile(boardFile);
 //    }
-    
+
 //    try {
 //      boardService.writeBoard(board);
 //      response.put("success", true);
@@ -413,7 +409,7 @@ public class BoardController {
 //      response.put("success", false);
 //      response.put("error", "게시글 등록에 실패했습니다.");
 //    }
-    
+
 //    return response;
 //  }
 
@@ -423,12 +419,12 @@ public class BoardController {
 //    Map<String, Object> response = new HashMap<>();
 //    Board board = boardService.readBoard(id);
 //    String userId = (String) session.getAttribute("loginUserId");
-    
+
 //    if (userId != null) {
 //      board.setLiked(boardService.checkLike(id, userId));
 //    }
 //    board.setLikeCount(boardService.getLikeCount(id));
-    
+
 //    response.put("board", board);
 //    return response;
 //  }
@@ -438,18 +434,18 @@ public class BoardController {
 //  public Map<String, Object> delete(@RequestParam("id") int id, HttpSession session) {
 //    Map<String, Object> response = new HashMap<>();
 //    String userId = (String) session.getAttribute("loginUserId");
-    
+
 //    if (userId == null) {
 //      response.put("error", "로그인이 필요합니다.");
 //      return response;
 //    }
-    
+
 //    Board board = boardService.readBoard(id);
 //    if (board == null || !board.getUserId().equals(userId)) {
 //      response.put("error", "삭제 권한이 없습니다.");
 //      return response;
 //    }
-    
+
 //    try {
 //      boardService.removeBoard(id);
 //      response.put("success", true);
@@ -458,7 +454,7 @@ public class BoardController {
 //      response.put("success", false);
 //      response.put("error", "게시글 삭제에 실패했습니다.");
 //    }
-    
+
 //    return response;
 //  }
 
@@ -468,12 +464,12 @@ public class BoardController {
 //    if (userId == null) {
 //      return "redirect:/login";
 //    }
-    
+
 //    Board board = boardService.readBoard(id);
 //    if (board == null || !board.getUserId().equals(userId)) {
 //      return "redirect:/board/list";
 //    }
-    
+
 //    model.addAttribute("board", board);
 //    return "/board/updateform";
 //  }
@@ -485,30 +481,30 @@ public class BoardController {
 //                  HttpSession session) throws IllegalStateException, IOException {
 //    Map<String, Object> response = new HashMap<>();
 //    String userId = (String) session.getAttribute("loginUserId");
-    
+
 //    if (userId == null) {
 //      response.put("error", "로그인이 필요합니다.");
 //      return response;
 //    }
-    
+
 //    Board existingBoard = boardService.readBoard(board.getId());
 //    if (existingBoard == null || !existingBoard.getUserId().equals(userId)) {
 //      response.put("error", "수정 권한이 없습니다.");
 //      return response;
 //    }
-    
+
 //    board.setUserId(userId);
-    
+
 //    if (attach != null && !attach.isEmpty()) {
 //      String oriName = attach.getOriginalFilename();
 //      String subDir = new SimpleDateFormat("/yyyy/MM/dd/HH").format(new Date());
 //      String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/img";
-      
+
 //      File subDirFile = new File(uploadPath + subDir);
 //      if (!subDirFile.exists()) {
 //        subDirFile.mkdirs();
 //      }
-      
+
 //      String systemName = UUID.randomUUID().toString() + "_" + oriName;
 //      File dest = new File(subDirFile, systemName);
 //      attach.transferTo(dest);
@@ -520,7 +516,7 @@ public class BoardController {
 //      boardFile.setId(board.getId());
 //      board.setBoardFile(boardFile);
 //    }
-    
+
 //    try {
 //      boardService.modifyBoard(board);
 //      response.put("success", true);
@@ -529,7 +525,7 @@ public class BoardController {
 //      response.put("success", false);
 //      response.put("error", "게시글 수정에 실패했습니다.");
 //    }
-    
+
 //    return response;
 //  }
 
@@ -553,17 +549,17 @@ public class BoardController {
 //  public Map<String, Object> toggleLike(@RequestParam("boardId") int boardId, HttpSession session) {
 //    Map<String, Object> response = new HashMap<>();
 //    String userId = (String) session.getAttribute("loginUserId");
-    
+
 //    if (userId == null) {
 //      response.put("error", "로그인이 필요합니다.");
 //      return response;
 //    }
-    
+
 //    try {
 //      boardService.toggleLike(boardId, userId);
 //      boolean liked = boardService.checkLike(boardId, userId);
 //      int likeCount = boardService.getLikeCount(boardId);
-      
+
 //      response.put("success", true);
 //      response.put("liked", liked);
 //      response.put("likeCount", likeCount);
@@ -571,7 +567,7 @@ public class BoardController {
 //      response.put("success", false);
 //      response.put("error", "좋아요 처리에 실패했습니다.");
 //    }
-    
+
 //    return response;
 //  }
 // }
