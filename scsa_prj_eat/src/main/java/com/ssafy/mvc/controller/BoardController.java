@@ -248,10 +248,19 @@ public class BoardController {
 
 	@GetMapping("/search")
 	@ResponseBody
-	public Map<String, Object> search(@ModelAttribute SearchCondition condition) {
+	public Map<String, Object> search(@ModelAttribute SearchCondition condition, HttpSession session) {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			List<Board> boards = boardService.searchBoard(condition);
+			String userId = (String) session.getAttribute("loginUserId");
+
+			if (userId != null) {
+				for (Board board : boards) {
+					board.setLiked(boardService.checkLike(board.getId(), userId));
+					board.setLikeCount(boardService.getLikeCount(board.getId()));
+				}
+			}
+
 			response.put("success", true);
 			response.put("boards", boards);
 		} catch (Exception e) {
