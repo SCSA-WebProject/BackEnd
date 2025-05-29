@@ -107,4 +107,11 @@ public class BoardServiceImpl implements BoardService {
 	public List<Board> getPopularBoards(int limit) {
 		return boardDao.selectPopularBoards(limit);
 	}
+	
+	@Override
+	public List<Board> getBoardsByUserId(String userId) {
+		return boardDao.selectByUserId(userId);
+	}
+	
+
 }

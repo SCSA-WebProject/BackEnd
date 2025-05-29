@@ -1,6 +1,7 @@
 package com.ssafy.mvc.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ssafy.mvc.model.dto.Board;
 import com.ssafy.mvc.model.dto.User;
+import com.ssafy.mvc.model.service.BoardServiceImpl;
 import com.ssafy.mvc.model.service.UserServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
@@ -21,10 +24,12 @@ import jakarta.servlet.http.HttpSession;
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 	private final UserServiceImpl userService;
+	private final BoardServiceImpl boardService;
 
-//	@Autowired
-	public UserController(UserServiceImpl userService) {
+	//	@Autowired
+	public UserController(UserServiceImpl userService, BoardServiceImpl boardService) {
 		this.userService = userService;
+		this.boardService = boardService;
 	}
 	
 	@GetMapping("/")
@@ -111,5 +116,32 @@ public class UserController {
 	        return "available";
 	    }
 	}
+	
+	@GetMapping("/mypage/boards")
+	@ResponseBody
+	public Map<String, Object> getMyBoards(HttpSession session) {
+		Map<String, Object> response = new HashMap<>();
+		
+		// 세션에서 로그인한 사용자 ID 가져오기
+		String userId = (String) session.getAttribute("loginUserId");
+		
+		if (userId == null) {
+			response.put("error", "로그인이 필요합니다.");
+			return response;
+		}
+		
+		try {
+			// 사용자가 작성한 맛집 목록 조회
+			List<Board> myBoards = boardService.getBoardsByUserId(userId);
+			response.put("boards", myBoards);
+		} catch (Exception e) {
+			response.put("error", "맛집 목록 조회 중 오류가 발생했습니다.");
+		}
+		
+		return response;
+	}
 
 }
+
+
+

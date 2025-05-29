@@ -47,5 +47,7 @@ public interface BoardDao {
 	
 	// 좋아요가 많은 맛집 목록
 	List<Board> selectPopularBoards(int limit);
-
+	// 사용자가 작성한 맛집 목록
+	List<Board> selectByUserId(String userId);
+	
 }

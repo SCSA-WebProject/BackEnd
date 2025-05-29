@@ -40,4 +40,8 @@ public interface BoardService {
 	
 	// 좋아요가 많은 맛집 목록
 	List<Board> getPopularBoards(int limit);
+	
+	// 사용자가 작성한 맛집 목록 조회
+	List<Board> getBoardsByUserId(String userId);
+
 }
