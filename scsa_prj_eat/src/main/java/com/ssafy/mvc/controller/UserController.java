@@ -119,14 +119,11 @@ public class UserController {
 	
 	@GetMapping("/mypage/boards")
 	@ResponseBody
-	public Map<String, Object> getMyBoards(HttpSession session) {
+	public Map<String, Object> getMyBoards(@RequestParam("userId") String userId) {
 		Map<String, Object> response = new HashMap<>();
 		
-		// 세션에서 로그인한 사용자 ID 가져오기
-		String userId = (String) session.getAttribute("loginUserId");
-		
-		if (userId == null) {
-			response.put("error", "로그인이 필요합니다.");
+		if (userId == null || userId.trim().isEmpty()) {
+			response.put("error", "사용자 ID가 필요합니다.");
 			return response;
 		}
 		
