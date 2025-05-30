@@ -45,6 +45,7 @@ CREATE TABLE board_file (
     FOREIGN KEY (id) REFERENCES board(id) ON DELETE CASCADE
 );
 
+-- Diary 테이블
 CREATE TABLE diary (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
@@ -64,22 +65,10 @@ CREATE TABLE Users_Board_likes (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- 초기 데이터 삽입
+
 -- company 테이블 데이터
 INSERT INTO company (code, name) VALUES 
 (100, 'dx'),
 (200, 'ds'),
 (300, 'sds');
 
--- 관리자 계정 생성
-INSERT INTO users (id, password, name, class, phone, company_code) VALUES 
-('admin', 'admin', '관리자', 24, '010-1234-5678', 200);
-
--- 샘플 맛집 데이터
-INSERT INTO board (title, region, category, price, user_id) VALUES 
-('청진동 해장국', '서울 종로구', '한식', 15000, 'admin'),
-('이탈리안 레스토랑', '서울 강남구', '양식', 35000, 'admin'),
-('홍콩반점', '서울 서초구', '중식', 20000, 'admin'),
-('스시코우지', '서울 송파구', '일식', 45000, 'admin'),
-('태국음식점', '서울 마포구', '아시안', 25000, 'admin'),
-('술집 나무', '서울 용산구', '술집', 30000, 'admin');

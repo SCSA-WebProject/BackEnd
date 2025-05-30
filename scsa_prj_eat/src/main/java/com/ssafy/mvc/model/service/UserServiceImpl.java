@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.mvc.model.dao.UserDao;
 import com.ssafy.mvc.model.dto.User;
+import com.ssafy.mvc.model.dto.Board;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -40,6 +42,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int checkUserId(String id) {
 	    return userDao.checkUserId(id);
+	}
+
+	@Override
+	public User getUserById(String id) {
+		return userDao.selectById(id);
+	}
+
+	@Override
+	public List<Board> getLikedBoards(String userId) {
+		return userDao.selectLikedBoards(userId);
 	}
 
 }

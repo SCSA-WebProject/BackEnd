@@ -43,4 +43,21 @@
 	<select id="checkUserId" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM users WHERE id = #{id}
 	</select>
+
+	<select id="selectById" parameterType="String" resultMap="userMap">
+		SELECT u.id, u.password, u.name, u.phone, c.code as companyCode, c.name as companyName
+		FROM users u
+		LEFT JOIN company c ON u.company_code = c.code
+		WHERE u.id = #{id}
+	</select>
+
+	<select id="selectLikedBoards" parameterType="String" resultType="com.ssafy.mvc.model.dto.Board">
+		SELECT b.*, 
+		       (SELECT COUNT(*) FROM Users_Board_likes WHERE board_id = b.id) as likeCount,
+		       (SELECT liked FROM Users_Board_likes WHERE board_id = b.id AND user_id = #{userId}) as liked
+		FROM board b
+		INNER JOIN Users_Board_likes ubl ON b.id = ubl.board_id
+		WHERE ubl.user_id = #{userId} AND ubl.liked = true
+		ORDER BY b.id DESC
+	</select>
 </mapper>

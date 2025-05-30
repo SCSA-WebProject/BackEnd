@@ -138,6 +138,55 @@ public class UserController {
 		return response;
 	}
 
+	@GetMapping("/user/info")
+	@ResponseBody
+	public Map<String, Object> getUserInfo(@RequestParam("userId") String userId) {
+		Map<String, Object> response = new HashMap<>();
+		
+		if (userId == null || userId.trim().isEmpty()) {
+			response.put("error", "사용자 ID가 필요합니다.");
+			return response;
+		}
+		
+		try {
+			User user = userService.getUserById(userId);
+			if (user != null) {
+				Map<String, Object> userInfo = new HashMap<>();
+				userInfo.put("id", user.getId());
+				userInfo.put("name", user.getName());
+				userInfo.put("companyCode", user.getCompanyCode());
+				userInfo.put("companyName", user.getCompanyName());
+				response.put("user", userInfo);
+			} else {
+				response.put("error", "사용자를 찾을 수 없습니다.");
+			}
+		} catch (Exception e) {
+			response.put("error", "사용자 정보 조회 중 오류가 발생했습니다.");
+		}
+		
+		return response;
+	}
+
+	@GetMapping("/mypage/liked-boards")
+	@ResponseBody
+	public Map<String, Object> getLikedBoards(@RequestParam("userId") String userId) {
+		Map<String, Object> response = new HashMap<>();
+		
+		if (userId == null || userId.trim().isEmpty()) {
+			response.put("error", "사용자 ID가 필요합니다.");
+			return response;
+		}
+		
+		try {
+			List<Board> likedBoards = userService.getLikedBoards(userId);
+			response.put("boards", likedBoards);
+		} catch (Exception e) {
+			response.put("error", "좋아요 목록 조회 중 오류가 발생했습니다.");
+		}
+		
+		return response;
+	}
+
 }
 
 
