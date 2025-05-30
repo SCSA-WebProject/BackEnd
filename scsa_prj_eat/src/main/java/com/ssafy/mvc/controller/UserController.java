@@ -94,10 +94,15 @@ public class UserController {
 	
 	@PostMapping("/signup")
 	@ResponseBody
-	public Map<String, Object> signup(@RequestBody User user) {
+	public Map<String, Object> signup(@RequestBody User user, HttpSession session) {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			userService.signup(user);
+			
+			// 세션에 사용자 정보 저장
+			session.setAttribute("loginUser", user.getName());
+			session.setAttribute("loginUserId", user.getId());
+			
 			response.put("message", "회원가입이 완료되었습니다.");
 		} catch (Exception e) {
 			response.put("error", "회원가입 중 오류가 발생했습니다.");
